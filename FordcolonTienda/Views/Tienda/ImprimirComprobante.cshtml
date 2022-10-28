@@ -1,0 +1,126 @@
+﻿@model List<FordcolonTienda.Models.ViewModel.ComprobanteCompra2>
+
+@{
+    Layout = null;
+}
+
+<style>
+
+    * {
+        box-sizing: border-box;
+        margin: 2px;
+        padding: 0;
+    }
+
+    /* CCONTENIDO PRINCIPAL */
+    .contenedorDatos {
+        border-radius: 10px;
+        border: 3px solid #2879ca;
+        background: #2879ca21;
+        padding: 20px;
+        display: grid;
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .contenedorDatos label {
+        margin-bottom: 10px;
+    }
+
+    .imagen img {
+        height: 200px;
+        width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    /* TABLA */
+
+    .tablaPrincipal {
+        border-radius: 10px;
+        border: 3px solid #2879ca;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .tablaPrincipal thead {
+        background: #2879ca21;
+        font-size: 18px;
+        color: #1d548b;
+    }
+
+    .col1, .col2, .col3 {
+        border-right: 3px solid #2879ca;
+        padding: 5px;
+    }
+
+    .col4 {
+        padding: 5px;
+    }
+
+    .filaFinal {
+        border-top: 3px solid #2879ca;
+        padding: 5px;
+    }
+
+</style>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ImprimirComprobante</title>
+</head>
+<body>
+    <div class="imagen">
+        <img src="IMG/FordLogo.png">
+    </div>
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="contenedorDatos">
+        <label><b>CLIENTE:</b> @ViewBag.Contacto</label>
+        <br />
+        <label><b>ID DE TRANSACCION:</b> @ViewBag.idTransaccion</label>
+        <br />
+        <label><b>DIRECCION DE ENVIO: </b>@ViewBag.provincia, @ViewBag.localidad, @ViewBag.direccion, @ViewBag.codigoPostal</label>
+    </div>
+    <!-- TABLA -->
+    <div class="contenedorTabla">
+        <table class="tablaPrincipal">
+            <thead>
+                <tr>
+                    <th scope="col" class="col1">Nombre de Producto</th>
+                    <th scope="col" class="col2">Cantidad</th>
+                    <th scope="col" class="col3">Precio Unitario</th>
+                    <th scope="col" class="col4">Precio Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var precioTotal = item.precio * item.cantidad;
+
+                    <tr>
+                        <td class="col1">@item.nombreProducto</td>
+                        <td class="col2">@item.cantidad</td>
+                        <td class="col3">@item.precio</td>
+                        <td class="col4">@precioTotal</td>
+                    </tr>
+                }
+                <tr>
+                    <td class="filaFinal"><b> Monto Total:</b></td>
+                    <td class="filaFinal"></td>
+                    <td class="filaFinal"></td>
+                    <td class="filaFinal"><b>$: @ViewBag.montoTotal</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
+

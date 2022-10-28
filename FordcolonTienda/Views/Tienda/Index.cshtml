@@ -1,0 +1,401 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <link href="~/Estilos/FondoIinicio.css" rel="stylesheet" />
+</head>
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">FORDCOLON</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Encontra el producto que buscas</p>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section>
+    <div class="container-fluid px-5 my-5">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header bg-dark text-white">
+                                Marcas
+                            </div>
+                            <div id="contenedorMarca" class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header bg-dark text-white">
+                                Modelos
+                            </div>
+                            <div id="contenedorCategoria" class="card-body">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <div class="d-grid gap-2">
+                            <button id="btnAplicarFiltro" class="btn btn-outline-dark btn-block" type="button">
+                                <i class="fas fa-filter"></i>Aplicar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-9">
+                <div id="contenedorProducto" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    <div class="col mb-5">
+                        <div id="tarjeta" class="card h-100">
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Fancy Product</h5>
+                                    <!-- Product price-->
+                                    $40.00 - $80.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-5">
+                        <div class="card h-100">
+                            <!-- Sale badge-->
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                            <!-- Product image-->
+                            <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                            <!-- Product details-->
+                            <div class="card-body p-4">
+                                <div class="text-center">
+                                    <!-- Product name-->
+                                    <h5 class="fw-bolder">Special Item</h5>
+                                    <!-- STOCK CREADO  -->
+                                    <label id="divStock" class="fw-bolder">holas</label>
+                                    <!-- Product reviews-->
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                        <div class="bi-star-fill"></div>
+                                    </div>
+                                    <!-- Product price-->
+                                    <span class="text-muted text-decoration-line-through">$20.00</span>
+                                    $18.00
+                                </div>
+                            </div>
+                            <!-- Product actions-->
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+
+            MostrarMarcas();
+            MostrarProductos(0, 0)
+        })
+
+        function MostrarMarcas() {
+
+            jQuery.ajax({
+
+                url: "@Url.Action("ListarMarcas", "Tienda")",
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    $("#contenedorMarca").LoadingOverlay("hide");
+
+                    $("<div>").addClass("form-check").append(
+
+                        $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": "0", "id": "mx", "checked": "checked" }),
+                        $("<label>").addClass("form-check-label").text("Todos").attr({ "for": "mx" })
+                    ).appendTo("#contenedorMarca")
+
+                    $.each(response.data, function (i, element) {
+
+                        $("<div>").addClass("form-check").append(
+
+                            $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "marca", "value": element.idMarca, "id": "m" + i }),
+                            $("<label>").addClass("form-check-label").text(element.descripcion).attr({ "for": "m" + i })
+                        ).appendTo("#contenedorMarca")
+
+                    })
+
+                    MostrarModelos();
+
+                },
+                beforeSend: function () {
+
+                    $("#contenedorMarca").LoadingOverlay("show");
+                }
+
+            })
+
+        }
+
+        function MostrarModelos() {
+
+            var idMarca = $("input[name=marca]:checked").val()
+
+            jQuery.ajax({
+
+                url: "@Url.Action("ListarModeloPorMarca", "Tienda")",
+                type: "POST",
+                data: JSON.stringify({ idMarca: idMarca }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    $("#contenedorCategoria").html("");
+
+                    $("#contenedorCategoria").LoadingOverlay("hide");
+
+                    $("<div>").addClass("form-check").append(
+
+                        $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "categoria", "value": "0", "id": "cx", "checked": "checked" }),
+                        $("<label>").addClass("form-check-label").text("Todos").attr({ "for": "cx" })
+                    ).appendTo("#contenedorCategoria")
+
+                    $.each(response.data, function (i, element) {
+
+                        $("<div>").addClass("form-check").append(
+
+                            $("<input>").addClass("form-check-input").attr({ "type": "radio", "name": "categoria", "value": element.idCategoria, "id": "c" + i }),
+                            $("<label>").addClass("form-check-label").text(element.descripcion).attr({ "for": "c" + i })
+                        ).appendTo("#contenedorCategoria")
+
+                    })
+
+                },
+                beforeSend: function () {
+
+                    $("#contenedorCategoria").LoadingOverlay("show");
+                }
+
+            })
+
+        }
+
+        $(document).on("change", "input[name=marca]", function () {
+
+            MostrarModelos();
+        })
+
+
+        function MostrarProductos(idCategoria, idMarca) {
+
+            jQuery.ajax({
+
+                url: "@Url.Action("ListarProductos", "Tienda")",
+                type: "POST",
+                data: JSON.stringify({ idCategoria: idCategoria, idMarca: idMarca }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    $("#contenedorProducto").html("");
+
+                    $("#contenedorProducto").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, element) {
+
+                        if (element.stock == 0) {
+
+                            $("<div>").addClass("col-mb-5 mb-5").append(
+                                $("<div>").addClass("card h-100").append(
+                                    $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                    $("<div>").addClass("card-body p-4").append(
+                                        $("<div>").addClass("text-center").append(
+                                            $("<h5>").addClass("fw-bolder").text(element.nombre),
+                                            $("<label>").addClass("fw-bolder text-danger").text("SIN STOCK"),
+                                            $("<br>"),
+                                            "$ " + element.precio.toFixed(2)
+                                        )
+                                    ),
+                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
+
+                                        $("<div>").addClass("d-grid gap-2").append(
+
+                                            @*@if (Session["Cliente"] != null) {
+
+                                                @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
+                                            }*@
+
+                                            $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
+
+                                        )
+                                    )
+                                )
+                            ).appendTo("#contenedorProducto")
+
+                        }
+                        else {
+
+                            $("<div>").addClass("col-mb-5 mb-5").append(
+                                $("<div>").addClass("card h-100").append(
+                                    $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                    $("<div>").addClass("card-body p-4").append(
+                                        $("<div>").addClass("text-center").append(
+                                            $("<h5>").addClass("fw-bolder").text(element.nombre),
+                                            $("<label>").addClass("fw-bolder").text("Stock: " + element.stock),
+                                            $("<br>"),
+                                            "$ " + element.precio.toFixed(2)
+                                        )
+                                    ),
+                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
+
+                                        $("<div>").addClass("d-grid gap-2").append(
+
+                                            @if (Session["Cliente"] != null) {
+
+                                                @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
+                                            }
+
+                                            $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
+
+                                        )
+                                    )
+                                )
+                            ).appendTo("#contenedorProducto")
+
+                        }
+
+
+                        @*$("<div>").addClass("col-mb-5 mb-5").append(
+                            $("<div>").addClass("card h-100").append(
+                                $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                $("<div>").addClass("card-body p-4").append(
+                                    $("<div>").addClass("text-center").append(
+                                        $("<h5>").addClass("fw-bolder").text(element.nombre),
+                                        $("<label>").addClass("fw-bolder").attr({ "id": "divStock" }).text((element.stock != 0 ? "Stock: " + element.stock : "SIN STOCK")),
+                                        $("<br>"),
+                                        "$ " + element.precio.toFixed(2)
+                                    )
+                                ),
+                                $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
+
+                                    $("<div>").addClass("d-grid gap-2").append(
+
+                                        @if (Session["Cliente"] != null) {
+
+                                            @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
+                                        }
+
+                                        $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
+
+                                    )
+                                )
+                            )
+                        ).appendTo("#contenedorProducto")*@
+
+                    })
+
+                },
+                beforeSend: function () {
+
+                    $("#contenedorProducto").LoadingOverlay("show");
+                },
+
+            })
+
+        }
+
+        console.log($('label[id=divStock]').text())
+
+        if ($("#divStock").text("SIN STOCK")) {
+
+            const stock = document.getElementById(this)
+
+            /*stock.classList.add("text-danger")*/
+        }
+
+        $("#btnAplicarFiltro").click(function () {
+
+            var idCategoria = $("input[name=categoria]:checked").val()
+            var idMarca = $("input[name=marca]:checked").val()
+
+            MostrarProductos(idCategoria, idMarca)
+
+        })
+
+
+        //Este metodo hace: Cada vez que se haga click en el boton que tenga la clase "agregarCarrito", agrega un producto al carrito
+        $(document).on("click", "button.agregarCarrito", function () {
+
+            jQuery.ajax({
+
+                url: "@Url.Action("AgregarCarrito", "Tienda")",
+                type: "POST",
+                data: JSON.stringify({ idProducto: $(this).data("idproducto") }),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    //  "data" es una variable para acceder a las variables del metodo del Controlador, en este caso "AgregarCarrito" del controlador "Tienda". las Propiedades de la variable data se deben llamar por el mismo nombre declarado en el controlador
+                    if (data.respuesta) {
+
+                        //Este metodo esta declarado en la pagina Maestra "Layout" entonces como index esta referenciada a "layout" se puede llamar a los metodos declarados en layout
+                        MostrarCantidadCarrito();
+
+                        //SweetAlert para agregar al carrito
+                        swal({
+
+                            title: "Agregado al Carrito",
+                            text: "¿Desea ir al Carrito?",
+                            type: "success",
+                            showCancelButton: true,
+                            confirmButtonClass: "btn-primary",
+                            confirmButtonText: "Si",
+                            cancelButtonText: "No",
+                            closeOnConfirm: true,
+
+                        }, function () {
+                            //Redireccion a pagina del carrito
+                            window.location.href = '@Url.Action("Carrito", "Tienda")'
+
+                        })
+
+                    } else {
+                        //SweetAlert
+                        swal("", data.mensaje, "warning");
+                    }
+
+                }
+
+            });
+
+        })
+
+    </script>
+    
+}
+

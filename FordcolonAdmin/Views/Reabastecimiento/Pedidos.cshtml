@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-4 mt-4">
+    <li class="breadcrumb-item"><a href="index.html">Reabastecimiento</a></li>
+    <li class="breadcrumb-item active">Pedidos</li>
+</ol>
+
+<div class="card">
+    <div class="card-header">
+        <i class="fas fa-arrow-alt-circle-right"></i> Lista de Pedidos
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <button type="button" class="btn btn-success" onclick="abrirModal(null)">Realizar Pedido</button>
+            </div>
+        </div>
+        <hr />
+        <table id="tabla" class="display cell-border" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Fecha de Pedido</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="FormModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="exampleModalLabel">Pedidos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtId" value="0" />
+                <form id="contenedor" class="row">
+                    <div class="col-sm-3">
+                        <div class="mb-3">
+                            <label class="form-label">Producto</label>
+                            <select id="cboProducto" class="form-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" class="form-control" id="txtCantidad" name="Cantidad" />
+                        </div>
+                    </div>
+                </form>
+                <!-- MENSAJE DE ALERTA -->
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <div id="MensajeError" class="alert alert-danger" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="Guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    
+    <script>
+
+        
+
+        var tabladata;
+
+        $(document).ready(function () {
+
+            //TABLADATA: MUESTRA LOS LOS PEDIDOS REALIZADOS EN UNA TABLA, TRAYENDO LOS DATOS DESDE LA BD
+
+            tabladata = $("#tabla").DataTable({
+                responsive: true,
+                ordering: false,
+                "ajax": {
+                    url: '@Url.Action("ListarPedidos","Reabastecimiento")',
+                    type: "GET",
+                    dataType: "json"
+                },
+                "columns": [
+                    { "data": "nombre" },
+                    { "data": "cantidad" },
+                    { "data": "fechaPedido" }
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                },
+            });
+
+        })
+            //METODO AJAX PARA CARGAR COMBOBOX DE PRODUCTOS EN EL MODAL
+            jQuery.ajax({
+                url: '@Url.Action("ListarProductos","Mantenedor")',
+                type: "GET",
+                data: null,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $("<option>").attr({ "value": "0", "disabled" : "true" }).text("Seleccione un Producto").appendTo("#cboProducto");
+
+                    $.each(data.data, function (index, valor) {
+                        $("<option>").attr({ "value": valor.idProducto }).text(valor.nombre).appendTo("#cboProducto");
+                    })
+
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+
+            function abrirModal(json) {
+
+                $("#txtId").val(0);
+                $("#cboProducto").val($("#cboProducto option:first").val());
+                $("#txtCantidad").val("");
+
+                $("#MensajeError").hide();
+
+                $("#FormModal").modal("show")
+
+            }
+
+            function Guardar() {
+
+                //LLENA UN OBJETO CON LOS VALORES DE LOS INPUTS
+
+                var today = new Date();
+
+                var fecha = today.toLocaleDateString('es-AR');
+
+                var Pedido = {
+
+                    idPedido: $("#txtId").val(),
+                    idProducto: {
+                        idProducto: $("#cboProducto option:selected").val(),
+                        nombre: $("#cboProducto option:selected").text()
+                    },
+                    cantidad: $("#txtCantidad").val(),
+                    fechaPedido: fecha
+
+                }
+
+                jQuery.ajax({
+                    url: '@Url.Action("GuardarPedido", "Reabastecimiento")',
+                    type: "POST",
+                    data: JSON.stringify({ obj: Pedido }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        $(".modal-body").LoadingOverlay("hide");
+                        Pedido.nombre = Pedido.idProducto.nombre;
+                        tabladata.row.add(Pedido).draw(false);
+                        $("#FormModal").modal("hide")
+                    },
+                    error: function (error) {
+                        $(".modal-body").LoadingOverlay("hide");
+                        $("#MensajeError").text("Error Ajax");
+                        $("#MensajeError").show();
+                    },
+                    beforeSend: function () {
+                        $(".modal-body").LoadingOverlay("show", {
+                            imageResizeFactor: 2,
+                            text: "Cargando...",
+                            size: 14
+                        })
+                    },
+                });
+
+            }
+
+
+    </script>
+    
+    
+    }

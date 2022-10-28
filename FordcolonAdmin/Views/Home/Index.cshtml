@@ -1,0 +1,471 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1 class="mt-4">Dashboard</h1>
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Dashboard</li>
+</ol>
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Cantidad de Clientes</h6>
+                        <h6 id="totalCliente">0</h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Cantidad de Ventas</h6>
+                        <h6 id="totalVentas">0</h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fas fa-shopping-bag fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-secondary text-white mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <h6>Cantidad de Productos</h6>
+                        <h6 id="totalProductos">0</h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-tags me-1"></i>
+        Historial de Ventas
+    </div>
+    <div class="card-body">
+        <form action="@Url.Action("ExportarVenta", "Home")" method="post">
+            <div class="row align-items-end">
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Fecha de Inicio:</label>
+                        <input class="form-control" type="text" name="fechaInicio" id="txtFechaInicio" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">Fecha Fin:</label>
+                        <input class="form-control" type="text" name="fechaFin" id="txtFechaFin" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2">
+                        <label class="form-label">ID Transaccion:</label>
+                        <input class="form-control" type="text" name="idTransaccion" id="txtIdTransaccion" />
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2 d-grid">
+                        <button class="btn btn-primary" id="btnBuscar" type="button"><i class="fa fa-search"></i> Buscar</button>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="mb-2 d-grid">
+                        <button class="btn btn-success" type="submit"><i class="fa fa-file-excel"></i> Exportar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <hr />
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="tabla" class="display cell-border" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Fecha Venta</th>
+                            <th>Cliente</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>ID Transaccion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-5">
+    <div class="card-header">
+        Productos mas Vendidos
+    </div>
+    <div class="card-body">
+        <div class="row align-items-sm-start">
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Seleccione Mes:</label>
+                    <input class="form-control" type="text" name="Mes" id="txtMes" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2 d-grid">
+                    <label class="form-label">Buscar:</label>
+                    <button class="btn btn-primary" id="btnBuscarReporte" type="button"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <canvas id="ProductosMasVendidosChart" width="100" height="50"></canvas>
+    </div>
+</div>
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        Cantidad de Ventas por Mes
+    </div>
+    <div class="card-body">
+        <div class="row align-items-sm-start">
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Fecha de Inicio:</label>
+                    <input class="form-control" type="text" name="fechaInicioVenta" id="txtFechaInicioVenta" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Fecha Fin:</label>
+                    <input class="form-control" type="text" name="fechaFinVenta" id="txtFechaFinVenta" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2 d-grid">
+                    <label class="form-label">Buscar:</label>
+                    <button class="btn btn-primary" id="btnBuscarVenta" type="button"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <canvas id="VentasPorMesChart" width="100" height="50"></canvas>
+    </div>
+</div>
+
+
+
+
+    @section scripts{
+
+        <script src="https://cdn.datatables.net/plug-ins/1.12.1/sorting/datetime-moment.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+
+        <script>
+
+            var tabladata;
+            var UrlVenta;
+            var controlBar;
+            var graficoBar;
+
+            $(document).ready(function () {
+
+
+                //LLAMADO A LOS INPUTS PARA PODER ELEGIR FECHAS CON UN DATEPICKER CON LA LIBRERIA JQUERY.UI
+                $("#txtFechaInicio").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date('01/01/2022'))
+                $("#txtFechaFin").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+
+                jQuery.ajax({
+                    url: '@Url.Action("VistaDashboard", "Home")',
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        var objeto = data.resultado;
+
+                        $("#totalCliente").text(objeto.totalCliente)
+                        $("#totalVentas").text(objeto.totalVenta)
+                        $("#totalProductos").text(objeto.totalProducto)
+                    }
+                });
+
+
+                var Url = '@Url.Action("ListaReporte", "Home")' +
+                    "?fechaInicio=" + $("#txtFechaInicio").val() +
+                    "&fechaFin=" + $("#txtFechaFin").val() +
+                    "&idTransaccion=" + $("#txtIdTransaccion").val()
+
+
+                $.fn.dataTable.moment('DD/MM/YYYY');
+                tabladata = $("#tabla").DataTable({
+                    responsive: true,
+                    ordering: true,
+                    order: [[0, 'desc']],
+                    "ajax": {
+                        url: Url,
+                        type: "GET",
+                        dataType: "json"
+                    },
+                    "columns": [
+                        { "data": "fechaVenta" },
+                        { "data": "cliente" },
+                        { "data": "producto" },
+                        { "data": "precio" },
+                        { "data": "cantidad" },
+                        { "data": "total" },
+                        { "data": "idTransaccion" }
+
+                    ],
+                    "language": {
+                        "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+                    }
+                });
+
+
+
+            })
+
+            $("#btnBuscar").on("click", function () {
+
+                var nuevaUrl = '@Url.Action("ListaReporte", "Home")' +
+                    "?fechaInicio=" + $("#txtFechaInicio").val() +
+                    "&fechaFin=" + $("#txtFechaFin").val() +
+                    "&idTransaccion=" + $("#txtIdTransaccion").val()
+
+                tabladata.ajax.url(nuevaUrl).load();
+
+            })
+
+            jQuery.ajax({
+                    url: '@Url.Action("ReporteProductosMasVendidos", "Home")',
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+
+                        var arrayProducto = [];
+                        var arrayCantidad = [];
+
+                        for (var i = 0; i < data.length; i++) {
+
+                            arrayProducto.push(data[i].producto)
+                            arrayCantidad.push(data[i].cantidad)
+
+                        }
+
+                        var controlPie = document.getElementById("ProductosMasVendidosChart");
+
+                        var graficoPie = new Chart(controlPie, {
+                            type: 'pie',
+                            data: {
+                                labels: arrayProducto,
+                                datasets: [{
+                                    data: arrayCantidad,
+                                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
+
+                                }],
+                            },
+
+                        })
+
+                    },
+                    error: function (error) {
+
+                        alert('Exception:', error)
+                    }
+
+            });
+
+            // GRAFICO DE LAS VENTAS ACTUAL XDXDXDXDXD
+
+            //LLAMADO A LOS INPUTS PARA PODER ELEGIR FECHAS CON UN DATEPICKER CON LA LIBRERIA JQUERY.UI
+            $("#txtFechaInicioVenta").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date(new Date().getFullYear(), 0, 1))
+            $("#txtFechaFinVenta").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+
+            UrlVenta = '@Url.Action("ReporteVentasporMes", "Home")' +
+                    "?fechaInicio=" + $("#txtFechaInicioVenta").val() +
+                    "&fechaFin=" + $("#txtFechaFinVenta").val()
+
+            jQuery.ajax({
+                url: UrlVenta,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    var arrayMeses = [];
+                    var arrayCantidad = [];
+                    var arrayMonto = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        arrayMeses.push(data[i].mes)
+                        arrayCantidad.push(data[i].cantidad)
+                        arrayMonto.push(data[i].monto)
+
+                    }
+
+                    controlBar = document.getElementById("VentasPorMesChart");
+
+                    graficoBar = new Chart(controlBar, {
+                        type: 'bar',
+                        data: {
+                            labels: arrayMeses,
+                            datasets: [{
+                                label: "Ventas",
+                                backgroundColor: "#BB2100",
+                                data: arrayCantidad,
+                                yAxisID: 'A',
+
+                            },
+                            {
+                                label: "Monto",
+                                backgroundColor: "rgba(86, 88, 135,0.7)",
+                                data: arrayMonto,
+                                yAxisID: 'B',
+
+                            }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true,
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    id: 'A',
+                                    position: 'left',
+                                    ticks: {
+                                        beginAtZero:true,
+                                    }
+                                },
+                                {
+                                    id: 'B',
+                                    position: 'right',
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                }]
+                            }
+                        }
+
+                    })
+
+
+                }
+            });
+
+            $("#btnBuscarVenta").on("click", function () {
+
+                UrlVenta = '@Url.Action("ReporteVentasporMes", "Home")' +
+                    "?fechaInicio=" + $("#txtFechaInicioVenta").val() +
+                    "&fechaFin=" + $("#txtFechaFinVenta").val()
+
+                jQuery.ajax({
+                    url: UrlVenta,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data, chart, label) {
+
+                        var arrayMeses = [];
+                        var arrayCantidad = [];
+                        var arrayMonto = [];
+
+                        for (var i = 0; i < data.length; i++) {
+
+                            arrayMeses.push(data[i].mes)
+                            arrayCantidad.push(data[i].cantidad)
+                            arrayMonto.push(data[i].monto)
+                        }
+
+                        graficoBar.destroy()
+
+                        controlBar = document.getElementById("VentasPorMesChart");
+
+                        graficoBar = new Chart(controlBar, {
+                            type: 'bar',
+                            data: {
+                                labels: arrayMeses,
+                                datasets: [{
+                                    label: "Ventas",
+                                    backgroundColor: "#BB2100",
+                                    data: arrayCantidad,
+                                    yAxisID: 'A',
+
+                                },
+                                {
+                                    label: "Monto",
+                                    backgroundColor: "rgba(86, 88, 135,0.7)",
+                                    data: arrayMonto,
+                                    yAxisID: 'B',
+
+                                }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    xAxes: [{
+                                        gridLines: {
+                                            display: true,
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        gridLines: {
+                                            display: false
+                                        },
+                                        id: 'A',
+                                        position: 'left',
+                                        ticks: {
+                                            beginAtZero: true,
+                                        }
+                                    },
+                                    {
+                                        id: 'B',
+                                        position: 'right',
+                                        gridLines: {
+                                            display: false
+                                        },
+                                        ticks: {
+                                            beginAtZero: true,
+                                        }
+                                    }]
+                                }
+                            }
+
+                        })
+
+                    }
+                });
+
+            })
+
+
+        </script>
+
+    }
