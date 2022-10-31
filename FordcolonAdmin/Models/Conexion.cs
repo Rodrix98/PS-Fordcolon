@@ -87,7 +87,7 @@ namespace FordcolonAdmin.Models
             }
         }
 
-        public List<ReporteProducto> ReporteCantidadProductos()
+        public List<ReporteProducto> ReporteCantidadProductos(int mes)
         {
             List<ReporteProducto> lista = new List<ReporteProducto>();
 
@@ -96,8 +96,8 @@ namespace FordcolonAdmin.Models
                 string query = "sp_ReporteCantidadProductosPorMes";
 
                 SqlCommand cmd = new SqlCommand(query, oconexion);
-                //cmd.Parameters.AddWithValue("fechaInicio", fechaInicio);
-                //cmd.Parameters.AddWithValue("fechaFin", fechaFin);
+                cmd.Parameters.AddWithValue("Mes", mes);
+                
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 oconexion.Open();
@@ -111,6 +111,7 @@ namespace FordcolonAdmin.Models
                             {
                                 producto = dr["nombre"].ToString(),
                                 cantidad = Convert.ToInt32(dr["CantidadProductos"].ToString()),
+                                mes = dr["mes"].ToString()
                             }
 
                         );

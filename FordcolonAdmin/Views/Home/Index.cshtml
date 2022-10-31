@@ -116,14 +116,27 @@
 
 <div class="card mb-5">
     <div class="card-header">
-        Productos mas Vendidos
+        Productos mas Vendidos del Mes
     </div>
     <div class="card-body">
         <div class="row align-items-sm-start">
             <div class="col-sm-2">
                 <div class="mb-2">
                     <label class="form-label">Seleccione Mes:</label>
-                    <input class="form-control" type="text" name="Mes" id="txtMes" />
+                    <select class="form-control" id="cboMes">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm-2">
@@ -141,7 +154,7 @@
 
 <div class="card mb-4">
     <div class="card-header">
-        Cantidad de Ventas por Mes
+        Resumen de Ventas y Montos por Fecha
     </div>
     <div class="card-body">
         <div class="row align-items-sm-start">
@@ -180,9 +193,16 @@
         <script>
 
             var tabladata;
+
+            //variables para grafico de fechas
             var UrlVenta;
             var controlBar;
             var graficoBar;
+
+            //variables para grafico de cantidad
+
+            var controlBar2;
+            var graficoBar2;
 
             $(document).ready(function () {
 
@@ -253,45 +273,148 @@
 
             })
 
+            //GRAFICO DE CANTIDAD DE PRODUCTOS POR MES
+
+            var fecha = new Date().getMonth() + 1
+
+            var URLProductos = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + fecha
+
+            $("#cboMes").val(fecha)
+
             jQuery.ajax({
-                    url: '@Url.Action("ReporteProductosMasVendidos", "Home")',
+                url: URLProductos,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    var arrayMeses = [];
+                    var arrayCantidad = [];
+                    var arrayProducto = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        arrayMeses.push(data[i].mes)
+                        arrayCantidad.push(data[i].cantidad)
+                        arrayProducto.push(data[i].producto)
+
+                    }
+
+                    controlBar2 = document.getElementById("ProductosMasVendidosChart");
+
+                    graficoBar2 = new Chart(controlBar2, {
+                        type: 'bar',
+                        data: {
+                            labels: arrayProducto,
+                            datasets: [{
+                                label: "Cantidad",
+                                backgroundColor: ["#13eb78b3", "#1386ebb3", "#6613ebb3", "#eb1349b3", "#eb9813dc"],
+                                data: arrayCantidad,
+
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true,
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    position: 'left',
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                }]
+                            },
+                            title: {
+                                display: true,
+                                text: 'Cantidad de Productos de ' + arrayMeses[1],
+                                position: 'top',
+                                fontSize: 25,
+                            }
+                        }
+
+                    })
+
+
+                }
+            });
+
+            $("#btnBuscarReporte").on("click", function () {
+
+                var URLProductos2 = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + $('#cboMes').val()
+
+                jQuery.ajax({
+                    url: URLProductos2,
                     type: "GET",
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
 
-                        var arrayProducto = [];
+                        var arrayMeses = [];
                         var arrayCantidad = [];
+                        var arrayProducto = [];
 
                         for (var i = 0; i < data.length; i++) {
 
-                            arrayProducto.push(data[i].producto)
+                            arrayMeses.push(data[i].mes)
                             arrayCantidad.push(data[i].cantidad)
+                            arrayProducto.push(data[i].producto)
 
                         }
 
-                        var controlPie = document.getElementById("ProductosMasVendidosChart");
+                        graficoBar2.destroy()
 
-                        var graficoPie = new Chart(controlPie, {
-                            type: 'pie',
+                        controlBar2 = document.getElementById("ProductosMasVendidosChart");
+
+                        graficoBar2 = new Chart(controlBar2, {
+                            type: 'bar',
                             data: {
                                 labels: arrayProducto,
                                 datasets: [{
+                                    label: "Cantidad",
+                                    backgroundColor: ["#13eb78b3", "#1386ebb3", "#6613ebb3", "#eb1349b3", "#eb9813dc"],
                                     data: arrayCantidad,
-                                    backgroundColor: ['#007bff', '#dc3545', '#ffc107', '#28a745'],
 
-                                }],
+                                }]
                             },
+                            options: {
+                                scales: {
+                                    xAxes: [{
+                                        gridLines: {
+                                            display: true,
+                                        }
+                                    }],
+                                    yAxes: [{
+                                        gridLines: {
+                                            display: false
+                                        },
+                                        position: 'left',
+                                        ticks: {
+                                            beginAtZero: true,
+                                        }
+                                    }]
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Cantidad de Productos de ' + arrayMeses[1],
+                                    position: 'top',
+                                    fontSize: 25,
+                                }
+
+                            }
 
                         })
 
-                    },
-                    error: function (error) {
 
-                        alert('Exception:', error)
                     }
+                });
 
-            });
+            })
 
             // GRAFICO DE LAS VENTAS ACTUAL XDXDXDXDXD
 
@@ -330,14 +453,14 @@
                             labels: arrayMeses,
                             datasets: [{
                                 label: "Ventas",
-                                backgroundColor: "#BB2100",
+                                backgroundColor: "#13eb78b3",
                                 data: arrayCantidad,
                                 yAxisID: 'A',
 
                             },
                             {
                                 label: "Monto",
-                                backgroundColor: "rgba(86, 88, 135,0.7)",
+                                backgroundColor: "#6613ebb3",
                                 data: arrayMonto,
                                 yAxisID: 'B',
 
@@ -371,6 +494,12 @@
                                         beginAtZero: true,
                                     }
                                 }]
+                            },
+                            title: {
+                                display: true,
+                                text: 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                                position: 'top',
+                                fontSize: 25,
                             }
                         }
 
@@ -414,14 +543,14 @@
                                 labels: arrayMeses,
                                 datasets: [{
                                     label: "Ventas",
-                                    backgroundColor: "#BB2100",
+                                    backgroundColor: "#13eb78b3",
                                     data: arrayCantidad,
                                     yAxisID: 'A',
 
                                 },
                                 {
                                     label: "Monto",
-                                    backgroundColor: "rgba(86, 88, 135,0.7)",
+                                    backgroundColor: "#6613ebb3",
                                     data: arrayMonto,
                                     yAxisID: 'B',
 
@@ -455,6 +584,12 @@
                                             beginAtZero: true,
                                         }
                                     }]
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                                    position: 'top',
+                                    fontSize: 25,
                                 }
                             }
 

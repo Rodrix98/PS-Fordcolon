@@ -9,3 +9,14 @@ C:\Users\Rodri\source\repos\Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.csproj.C
 C:\Users\Rodri\source\repos\Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.csproj.CopyComplete
 C:\Users\Rodri\source\repos\Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.dll
 C:\Users\Rodri\source\repos\Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.pdb
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaNegocio.dll
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaNegocio.pdb
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaDatos.dll
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaEntidad.dll
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaDatos.pdb
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\bin\Debug\CapaEntidad.pdb
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.csproj.AssemblyReference.cache
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.csproj.CoreCompileInputs.cache
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.csproj.CopyComplete
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.dll
+C:\Users\Rodri\Documents\GitHubRepository\PS-Fordcolon\CapaNegocio\obj\Debug\CapaNegocio.pdb

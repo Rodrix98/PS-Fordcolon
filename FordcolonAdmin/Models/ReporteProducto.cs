@@ -9,5 +9,6 @@ namespace FordcolonAdmin.Models
     {
         public string producto { get; set; }
         public int cantidad { get; set; }
+        public string mes { get; set; }
     }
 }
