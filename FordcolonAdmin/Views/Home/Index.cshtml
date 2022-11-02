@@ -2,10 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<h1 class="mt-4">Dashboard</h1>
-<ol class="breadcrumb mb-4">
-    <li class="breadcrumb-item active">Dashboard</li>
-</ol>
+<h1 class="mt-4 mb-4">Resumen de Ventas</h1>
 <div class="row">
     <div class="col-xl-3 col-md-6">
         <div class="card bg-success text-white mb-4">
@@ -114,7 +111,7 @@
     </div>
 </div>
 
-<div class="card mb-5">
+@*<div class="card mb-5">
     <div class="card-header">
         Productos mas Vendidos del Mes
     </div>
@@ -180,7 +177,7 @@
         <hr />
         <canvas id="VentasPorMesChart" width="100" height="50"></canvas>
     </div>
-</div>
+</div>*@
 
 
 
@@ -275,7 +272,7 @@
 
             //GRAFICO DE CANTIDAD DE PRODUCTOS POR MES
 
-            var fecha = new Date().getMonth() + 1
+            @*var fecha = new Date().getMonth() + 1
 
             var URLProductos = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + fecha
 
@@ -332,7 +329,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'Cantidad de Productos de ' + arrayMeses[1],
+                                text: arrayMeses[0] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
                                 position: 'top',
                                 fontSize: 25,
                             }
@@ -401,7 +398,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Cantidad de Productos de ' + arrayMeses[1],
+                                    text: arrayMeses[0] == null ? 'No se encontraron resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
                                     position: 'top',
                                     fontSize: 25,
                                 }
@@ -416,7 +413,7 @@
 
             })
 
-            // GRAFICO DE LAS VENTAS ACTUAL XDXDXDXDXD
+            // GRAFICO DE LAS VENTAS
 
             //LLAMADO A LOS INPUTS PARA PODER ELEGIR FECHAS CON UN DATEPICKER CON LA LIBRERIA JQUERY.UI
             $("#txtFechaInicioVenta").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date(new Date().getFullYear(), 0, 1))
@@ -497,7 +494,7 @@
                             },
                             title: {
                                 display: true,
-                                text: 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                                text: arrayMeses[0] == null ? 'No se encontraron resultados' : 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
                                 position: 'top',
                                 fontSize: 25,
                             }
@@ -587,7 +584,7 @@
                                 },
                                 title: {
                                     display: true,
-                                    text: 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                                    text: arrayMeses[0] == null ? 'No se encontraron resultados' : 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
                                     position: 'top',
                                     fontSize: 25,
                                 }
@@ -598,7 +595,7 @@
                     }
                 });
 
-            })
+            })*@
 
 
         </script>

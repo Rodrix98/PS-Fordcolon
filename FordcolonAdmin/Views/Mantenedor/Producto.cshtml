@@ -4,12 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<ol class="breadcrumb mb-4 mt-4">
-    <li class="breadcrumb-item"><a href="index.html">Mantenimiento</a></li>
-    <li class="breadcrumb-item active">Productos</li>
-</ol>
-
-<div class="card">
+<h1 class="mt-4 mb-4">Productos</h1>
+<div class="card mt-4">
     <div class="card-header">
         <i class="fas fa-boxes me-1"></i> Lista de Productos
     </div>
@@ -222,8 +218,8 @@
         //FUNCION PARA VALIDAR CAMPOS
 
         jQuery.validator.addMethod("preciodecimal", function (value, element) {
-            return this.optional(element) || /^\d{0,4}(\.\d{0,2})?$/i.test(value);
-        }, "El formato correcto del precio es ##.##");
+            return this.optional(element) || /^\d{0,4}(\,\d{0,2})?$/i.test(value);
+        }, "El formato correcto del precio es ##,##");
 
         $("#contenedor").validate({
 
@@ -249,7 +245,7 @@
             messages: {
                 Nombre: "- El campo nombre es obligatorio",
                 Descripcion: "- El campo descripcion es obligatorio",
-                Precio: { required: "- El campo precio es obligatorio", preciodecimal: "El formato correcto del precio es ##.##" },
+                Precio: { required: "- El campo precio es obligatorio", preciodecimal: "El formato correcto del precio es ##,##" },
                 Stock: { required: "- El campo stock es obligatorio", preciodecimal: "- Debe ingresar solo numeros en el stock" },
             },
             errorElement: "div",

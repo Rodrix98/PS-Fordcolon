@@ -19,8 +19,11 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
-                                <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
+                                <div class="card-header bg-dark">
+                                    <img class="text-center" src="~/IMG/LOGO.png" />
+                                </div>
                                 <div class="card-body">
+                                    <h3 class="text-center font-weight-light mb-3">Login</h3>
                                     <form action="@Url.Action("Index", "Acceso")" method="post">
                                         <div class="form-floating mb-3">
                                             <input class="form-control" name="correo" type="email" placeholder="test@gmail.com" />

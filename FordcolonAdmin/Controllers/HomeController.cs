@@ -20,6 +20,16 @@ namespace FordcolonAdmin.Controllers
             return View();
         }
 
+        public ActionResult Reporte1()
+        {
+            return View();
+        }
+
+        public ActionResult Reporte2()
+        {
+            return View();
+        }
+
         public ActionResult Usuarios()
         {
             return View();

@@ -111,7 +111,8 @@ namespace FordcolonAdmin.Models
                             {
                                 producto = dr["nombre"].ToString(),
                                 cantidad = Convert.ToInt32(dr["CantidadProductos"].ToString()),
-                                mes = dr["mes"].ToString()
+                                mes = dr["mes"].ToString(),
+                                montoTotal = Convert.ToInt32(dr["MontoTotal"].ToString())
                             }
 
                         );

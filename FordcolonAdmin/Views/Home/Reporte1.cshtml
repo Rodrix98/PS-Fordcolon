@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "Reporte1";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-4 mb-4">Ventas y Montos</h1>
+<div class="card mb-4">
+    <div class="card-header">
+        Resumen de Ventas y Montos por Fecha
+    </div>
+    <div class="card-body">
+        <div class="row align-items-sm-start">
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Fecha de Inicio:</label>
+                    <input class="form-control" type="text" name="fechaInicioVenta" id="txtFechaInicioVenta" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Fecha Fin:</label>
+                    <input class="form-control" type="text" name="fechaFinVenta" id="txtFechaFinVenta" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2 d-grid">
+                    <label class="form-label">Buscar:</label>
+                    <button class="btn btn-primary" id="btnBuscarVenta" type="button"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <canvas id="VentasPorMesChart" width="200" height="67"></canvas>
+    </div>
+</div>
+
+@section scripts{
+    
+    <script>
+
+        var UrlVenta;
+        var controlBar;
+        var graficoBar;
+
+        // GRAFICO DE LAS VENTAS ACTUAL XDXDXDXDXD
+
+        //LLAMADO A LOS INPUTS PARA PODER ELEGIR FECHAS CON UN DATEPICKER CON LA LIBRERIA JQUERY.UI
+        $("#txtFechaInicioVenta").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date(new Date().getFullYear(), 0, 1))
+        $("#txtFechaFinVenta").datepicker({ dateFormat: 'dd/mm/yy' }).datepicker('setDate', new Date())
+
+        UrlVenta = '@Url.Action("ReporteVentasporMes", "Home")' +
+                "?fechaInicio=" + $("#txtFechaInicioVenta").val() +
+                "&fechaFin=" + $("#txtFechaFinVenta").val()
+
+        jQuery.ajax({
+            url: UrlVenta,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                var arrayMeses = [];
+                var arrayCantidad = [];
+                var arrayMonto = [];
+
+                for (var i = 0; i < data.length; i++) {
+
+                    arrayMeses.push(data[i].mes)
+                    arrayCantidad.push(data[i].cantidad)
+                    arrayMonto.push(data[i].monto)
+
+                }
+
+                controlBar = document.getElementById("VentasPorMesChart");
+
+                graficoBar = new Chart(controlBar, {
+                    type: 'bar',
+                    data: {
+                        labels: arrayMeses,
+                        datasets: [{
+                            label: "Ventas",
+                            backgroundColor: "#13eb78b3",
+                            data: arrayCantidad,
+                            yAxisID: 'A',
+
+                        },
+                        {
+                            label: "Monto",
+                            backgroundColor: "#6613ebb3",
+                            data: arrayMonto,
+                            yAxisID: 'B',
+
+                        }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: true,
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                id: 'A',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero:true,
+                                }
+                            },
+                            {
+                                id: 'B',
+                                position: 'right',
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }]
+                        },
+                        title: {
+                            display: true,
+                            text: arrayMeses[1] == null ? 'No se encontraron resultados' : 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                            position: 'top',
+                            fontSize: 25,
+                        }
+                    }
+
+                })
+
+
+            }
+        });
+
+        $("#btnBuscarVenta").on("click", function () {
+
+            UrlVenta = '@Url.Action("ReporteVentasporMes", "Home")' +
+                "?fechaInicio=" + $("#txtFechaInicioVenta").val() +
+                "&fechaFin=" + $("#txtFechaFinVenta").val()
+
+            jQuery.ajax({
+                url: UrlVenta,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data, chart, label) {
+
+                    var arrayMeses = [];
+                    var arrayCantidad = [];
+                    var arrayMonto = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        arrayMeses.push(data[i].mes)
+                        arrayCantidad.push(data[i].cantidad)
+                        arrayMonto.push(data[i].monto)
+                    }
+
+                    graficoBar.destroy()
+
+                    controlBar = document.getElementById("VentasPorMesChart");
+
+                    graficoBar = new Chart(controlBar, {
+                        type: 'bar',
+                        data: {
+                            labels: arrayMeses,
+                            datasets: [{
+                                label: "Ventas",
+                                backgroundColor: "#13eb78b3",
+                                data: arrayCantidad,
+                                yAxisID: 'A',
+
+                            },
+                            {
+                                label: "Monto",
+                                backgroundColor: "#6613ebb3",
+                                data: arrayMonto,
+                                yAxisID: 'B',
+
+                            }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true,
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    id: 'A',
+                                    position: 'left',
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                },
+                                {
+                                    id: 'B',
+                                    position: 'right',
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                }]
+                            },
+                            title: {
+                                display: true,
+                                text: arrayMeses == null ? 'No se encontraron resultados' : 'Mostrando resultados desde ' + $("#txtFechaInicioVenta").val() + ' hasta ' + $("#txtFechaFinVenta").val(),
+                                position: 'top',
+                                fontSize: 25,
+                            }
+                        }
+
+                    })
+
+                }
+            });
+
+        })
+
+
+    </script>
+    
+    
+    
+    
+}
+

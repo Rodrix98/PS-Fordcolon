@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<head>
+    <link href="~/Estilos/FondoIinicio.css" rel="stylesheet" />
+</head>
 <div class="row">
     <div class="col-sm-12 text-center">
         <br /><br />
@@ -15,11 +18,10 @@
                 <h1 class="text-success">Gracias!</h1>
                 <i class="far fa-check-circle fa-9x text-success"></i>
                 <h2 class="text-success"> Su pago fue realizado con Exito!</h2>
-                <h4>ID de Transaccion: @ViewData["idTransaccion"]</h4>
-                <br />
-                <a href="@Url.Action("Index", "Tienda")" class="btn btn-primary">Volver a la Tienda</a>
-                <br />
-                <a href="@Url.Action("ImprimirComprobante", "Tienda")" class="btn btn-success">Imprimir Comprobante de Compra</a>
+                <h4 class="mb-3">ID de Transaccion: @ViewData["idTransaccion"]</h4>
+                <a href="@Url.Action("Index", "Tienda")" class="btn btn-primary mb-5">Volver a la Tienda</a>
+                <h4 class="mb-3">DESCARGAR COMPROBANTE DE COMPRA</h4>
+                <a href="@Url.Action("ImprimirComprobante", "Tienda")" class="btn btn-success"><i class="fa fa-file-pdf"></i> Descargar Comprobante</a>
                 TempData["IdTransaccion"] = ViewData["IdTransaccion"];
                 TempData["Localidad"] = ViewData["Localidad"];
                 TempData["CodigoPostal"] = ViewData["CodigoPostal"];

@@ -1,0 +1,243 @@
+﻿
+@{
+    ViewBag.Title = "Reporte2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mt-4 mb-4">Productos mas Vendidos del Mes</h1>
+<div class="card mb-5">
+    <div class="card-header">
+        Productos mas Vendidos del Mes
+    </div>
+    <div class="card-body">
+        <div class="row align-items-sm-start">
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Seleccione Mes:</label>
+                    <select class="form-control" id="cboMes">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="mb-2 d-grid">
+                    <label class="form-label">Buscar:</label>
+                    <button class="btn btn-primary" id="btnBuscarReporte" type="button"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <canvas id="ProductosMasVendidosChart" width="200" height="60"></canvas>
+    </div>
+</div>
+
+@section scripts{
+    
+    <script>
+
+        var controlBar2;
+        var graficoBar2;
+
+        var fecha = new Date().getMonth() + 1
+
+        var URLProductos = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + fecha
+
+        $("#cboMes").val(fecha)
+
+        jQuery.ajax({
+            url: URLProductos,
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                var arrayMeses = [];
+                var arrayCantidad = [];
+                var arrayProducto = [];
+                var arrayMonto = [];
+
+                for (var i = 0; i < data.length; i++) {
+
+                    arrayMeses.push(data[i].mes)
+                    arrayCantidad.push(data[i].cantidad)
+                    arrayProducto.push(data[i].producto)
+                    arrayMonto.push(data[i].montoTotal)
+
+                }
+
+                controlBar2 = document.getElementById("ProductosMasVendidosChart");
+
+                graficoBar2 = new Chart(controlBar2, {
+                    type: 'bar',
+                    data: {
+                        labels: arrayProducto,
+                        datasets: [{
+                            label: "Cantidad",
+                            backgroundColor: "#eb1349b3",
+                            data: arrayCantidad,
+                            yAxisID: 'A',
+
+                        },
+                        {
+                            label: "Monto",
+                            backgroundColor: "#1386ebb3",
+                            data: arrayMonto,
+                            yAxisID: 'B',
+
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [{
+                                gridLines: {
+                                    display: true,
+                                }
+                            }],
+                            yAxes: [{
+                                gridLines: {
+                                    display: false
+                                },
+                                id: 'A',
+                                position: 'left',
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            },
+                            {
+                                id: 'B',
+                                position: 'right',
+                                gridLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }]
+                        },
+                        title: {
+                            display: true,
+                            text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
+                            position: 'top',
+                            fontSize: 25,
+                        }
+                    }
+
+                })
+
+
+            }
+        });
+
+        $("#btnBuscarReporte").on("click", function () {
+
+            var URLProductos2 = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + $('#cboMes').val()
+
+            jQuery.ajax({
+                url: URLProductos2,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    var arrayMeses = [];
+                    var arrayCantidad = [];
+                    var arrayProducto = [];
+                    var arrayMonto = [];
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        arrayMeses.push(data[i].mes)
+                        arrayCantidad.push(data[i].cantidad)
+                        arrayProducto.push(data[i].producto)
+                        arrayMonto.push(data[i].montoTotal)
+
+                    }
+
+                    graficoBar2.destroy()
+
+                    controlBar2 = document.getElementById("ProductosMasVendidosChart");
+
+                    graficoBar2 = new Chart(controlBar2, {
+                        type: 'bar',
+                        data: {
+                            labels: arrayProducto,
+                            datasets: [{
+                                label: "Cantidad",
+                                backgroundColor: "#eb1349b3",
+                                data: arrayCantidad,
+                                yAxisID: 'A',
+
+                            },
+                            {
+                                label: "Monto",
+                                backgroundColor: "#1386ebb3",
+                                data: arrayMonto,
+                                yAxisID: 'B',
+
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: true,
+                                    }
+                                }],
+                                yAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    id: 'A',
+                                    position: 'left',
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                },
+                                {
+                                    id: 'B',
+                                    position: 'right',
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                    }
+                                }]
+                            },
+                            title: {
+                                display: true,
+                                text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
+                                position: 'top',
+                                fontSize: 25,
+                            }
+                        }
+
+                    })
+
+
+                }
+            });
+
+        })
+
+
+    </script>    
+
+
+
+
+
+    
+}
+
