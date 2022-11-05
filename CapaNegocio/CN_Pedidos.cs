@@ -23,5 +23,6 @@ namespace CapaNegocio
             return objCapaDato.RegistrarPedido(obj);
            
         }
+
     }
 }

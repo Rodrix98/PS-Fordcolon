@@ -107,7 +107,6 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
                 {
                     SqlCommand cmd = new SqlCommand("sp_RegistrarPedido", oconexion);
-                    cmd.Parameters.AddWithValue("idProducto", obj.idProducto.idProducto);
                     cmd.Parameters.AddWithValue("cantidad", obj.cantidad);
                     cmd.Parameters.AddWithValue("nombre", obj.idProducto.nombre);
                     cmd.Parameters.AddWithValue("fechaPedido", obj.fechaPedido);

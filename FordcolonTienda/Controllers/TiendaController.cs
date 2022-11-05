@@ -41,17 +41,6 @@ namespace FordcolonTienda.Controllers
             return View(oProducto);
         }
 
-
-        //[HttpGet]
-        //public JsonResult ListaCategorias()
-        //{
-        //    List<Categoria> lista = new List<Categoria>();
-
-        //    lista = new CN_Categoria().ListarCategorias();
-
-        //    return Json(new { data = lista}, JsonRequestBehavior.AllowGet);
-        //}
-
         [HttpGet]
         public JsonResult ListarMarcas()
         {
@@ -71,16 +60,6 @@ namespace FordcolonTienda.Controllers
 
             return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
         }
-
-        //[HttpPost]
-        //public JsonResult ListarMarcaPorCategoria(int idCategoria)
-        //{
-        //    List<Marca> lista = new List<Marca>();
-
-        //    lista = new CN_Marca().ListarMarcasPorCategoria(idCategoria);
-
-        //    return Json(new { data = lista }, JsonRequestBehavior.AllowGet);
-        //}
 
         [HttpPost]
         public JsonResult ListarProductos(int idCategoria, int idMarca)
@@ -109,6 +88,40 @@ namespace FordcolonTienda.Controllers
                 p.idCategoria.idCategoria == (idCategoria == 0 ? p.idCategoria.idCategoria : idCategoria) &&
                 p.idMarca.idMarca == (idMarca == 0 ? p.idMarca.idMarca : idMarca) /*&&
                 p.stock > 0 */ && p.activo == true
+
+            ).ToList();
+
+            var jsonresult = Json(new { data = lista }, JsonRequestBehavior.AllowGet);
+
+            jsonresult.MaxJsonLength = int.MaxValue;
+
+            return jsonresult;
+        }
+
+        public JsonResult BuscarProductos(string valor)
+        {
+            List<Producto> lista = new List<Producto>();
+
+            bool conversion;
+
+            lista = new CN_Producto().BuscarProducto(valor).Select(p => new Producto()
+            {
+
+                idProducto = p.idProducto,
+                nombre = p.nombre,
+                descripcion = p.descripcion,
+                idMarca = p.idMarca,
+                idCategoria = p.idCategoria,
+                precio = p.precio,
+                stock = p.stock,
+                rutaImagen = p.rutaImagen,
+                Base64 = CN_Recursos.ConvertirBase64(Path.Combine(p.rutaImagen, p.nombreImagen), out conversion),
+                Extension = Path.GetExtension(p.nombreImagen),
+                activo = p.activo
+
+            }).Where(p =>
+
+                p.activo == true
 
             ).ToList();
 

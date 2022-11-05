@@ -34,7 +34,7 @@ namespace FordcolonAdmin.Controllers
             Usuario oUsuario = new Usuario();
 
             oUsuario = new CN_Usuarios().Listar().Where(u => u.correo == correo && u.clave == CN_Recursos.ConvertirSHA256(clave)).FirstOrDefault();
-
+            //u.activo == true &&
             if (oUsuario == null)
             {
 
@@ -51,6 +51,14 @@ namespace FordcolonAdmin.Controllers
 
                     return RedirectToAction("CambiarClave");
                 }
+                else if (oUsuario.activo == false)
+                {
+
+                    ViewBag.Error = "Esta cuenta esta desactivada";
+                    return View();
+
+                }
+                
 
                 FormsAuthentication.SetAuthCookie(oUsuario.correo, false);
 

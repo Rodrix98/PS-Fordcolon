@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="mb-3">
-                            <label class="form-label">Stock</label>
+                            <label id="labelStock" class="form-label">Stock</label>
                             <input type="number" class="form-control" id="txtStock" name="Stock" />
                         </div>
                         <div class="mb-3">
@@ -254,6 +254,9 @@
 
         function abrirModal(json) {
 
+            $("#labelStock").show();
+            $("#txtStock").attr('type', 'number');
+
             $("#txtId").val(0);
             $("#imgProducto").removeAttr("src");
             $("#fileProducto").val("");
@@ -314,6 +317,9 @@
             var data = tabladata.row(filaSeleccionada).data();
 
             abrirModal(data)
+
+            $("#txtStock").attr('type', 'hidden');
+            $("#labelStock").hide();
 
         })
 

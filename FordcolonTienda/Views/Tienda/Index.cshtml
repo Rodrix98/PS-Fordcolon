@@ -63,6 +63,14 @@
                 </div>
             </div>
             <div class="col-sm-9">
+                <div class="row mb-4 mt-lg-2">
+                    <div class="col-sm-9">
+                        <input id="inputValor" class="form-control inputBuscar" type="text" name="name" placeholder="ej: Termostato" />
+                    </div>
+                    <div class="col-sm-3">
+                        <button id="BuscarPorFiltro" class="btn btn-outline-dark btn-block" type="button">Buscar</button>
+                    </div>
+                </div>
                 <div id="contenedorProducto" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                     <div class="col mb-5">
                         <div id="tarjeta" class="card h-100">
@@ -298,34 +306,6 @@
 
                         }
 
-
-                        @*$("<div>").addClass("col-mb-5 mb-5").append(
-                            $("<div>").addClass("card h-100").append(
-                                $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
-                                $("<div>").addClass("card-body p-4").append(
-                                    $("<div>").addClass("text-center").append(
-                                        $("<h5>").addClass("fw-bolder").text(element.nombre),
-                                        $("<label>").addClass("fw-bolder").attr({ "id": "divStock" }).text((element.stock != 0 ? "Stock: " + element.stock : "SIN STOCK")),
-                                        $("<br>"),
-                                        "$ " + element.precio.toFixed(2)
-                                    )
-                                ),
-                                $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
-
-                                    $("<div>").addClass("d-grid gap-2").append(
-
-                                        @if (Session["Cliente"] != null) {
-
-                                            @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
-                                        }
-
-                                        $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
-
-                                    )
-                                )
-                            )
-                        ).appendTo("#contenedorProducto")*@
-
                     })
 
                 },
@@ -400,6 +380,101 @@
                 }
 
             });
+
+        })
+
+        $("#BuscarPorFiltro").click(function () {
+
+            var valor = $("#inputValor").val()
+
+            console.log(valor)
+
+            jQuery.ajax({
+
+                url: "@Url.Action("BuscarProductos", "Tienda")",
+                type: "POST",
+                data: JSON.stringify({ valor: valor}),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+
+                    $("#contenedorProducto").html("");
+
+                    $("#contenedorProducto").LoadingOverlay("hide");
+
+                    $.each(response.data, function (i, element) {
+
+                        if (element.stock == 0) {
+
+                            $("<div>").addClass("col-mb-5 mb-5").append(
+                                $("<div>").addClass("card h-100").append(
+                                    $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                    $("<div>").addClass("card-body p-4").append(
+                                        $("<div>").addClass("text-center").append(
+                                            $("<h5>").addClass("fw-bolder").text(element.nombre),
+                                            $("<label>").addClass("fw-bolder text-danger").text("SIN STOCK"),
+                                            $("<br>"),
+                                            "$ " + element.precio.toFixed(2)
+                                        )
+                                    ),
+                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
+
+                                        $("<div>").addClass("d-grid gap-2").append(
+
+                                            @*@if (Session["Cliente"] != null) {
+
+                                                @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
+                                            }*@
+
+                                            $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
+
+                                        )
+                                    )
+                                )
+                            ).appendTo("#contenedorProducto")
+
+                        }
+                        else {
+
+                            $("<div>").addClass("col-mb-5 mb-5").append(
+                                $("<div>").addClass("card h-100").append(
+                                    $("<img>").addClass("card-img-top").attr({ "src": "data:image/" + element.Extension + ";base64," + element.Base64 }),
+                                    $("<div>").addClass("card-body p-4").append(
+                                        $("<div>").addClass("text-center").append(
+                                            $("<h5>").addClass("fw-bolder").text(element.nombre),
+                                            $("<label>").addClass("fw-bolder").text("Stock: " + element.stock),
+                                            $("<br>"),
+                                            "$ " + element.precio.toFixed(2)
+                                        )
+                                    ),
+                                    $("<div>").addClass("card-footer p-2 pt-0 border-top-0 bg-transparent").append(
+
+                                        $("<div>").addClass("d-grid gap-2").append(
+
+                                            @if (Session["Cliente"] != null) {
+
+                                                @:$("<button>").addClass("btn btn-success mt-auto agregarCarrito").data("idproducto", element.idProducto).text("Agregar al Carrito"),
+                                            }
+
+                                            $("<a>").addClass("btn btn-dark mt-auto").attr({ "href": "@Url.Action("DetalleProducto", "Tienda")" + "?idproducto=" + element.idProducto }).text("Ver Detalle")
+
+                                        )
+                                    )
+                                )
+                            ).appendTo("#contenedorProducto")
+
+                        }
+
+                    })
+
+                },
+                beforeSend: function () {
+
+                    $("#contenedorProducto").LoadingOverlay("show");
+                },
+
+            })
+
 
         })
 

@@ -232,5 +232,57 @@ namespace CapaDatos
             return resultado;
 
         }
+
+        public List<Producto> BuscarProductos(string valor)
+        {
+            List<Producto> lista = new List<Producto>();
+
+            try
+            {
+                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                {
+
+                    SqlCommand cmd = new SqlCommand("sp_BuscarProducto", oconexion);
+                    cmd.Parameters.AddWithValue("valor", valor);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+
+                        while (dr.Read())
+                        {
+                            lista.Add(
+                                new Producto()
+                                {
+                                    idProducto = Convert.ToInt32(dr["idProducto"]),
+                                    nombre = dr["nombre"].ToString(),
+                                    descripcion = dr["descripcion"].ToString(),
+                                    idMarca = new Marca() { idMarca = Convert.ToInt32(dr["idMarca"]), descripcion = dr["desMarca"].ToString() },
+                                    idCategoria = new Categoria() { idCategoria = Convert.ToInt32(dr["idCategoria"]), descripcion = dr["desCategoria"].ToString() },
+                                    precio = Convert.ToDecimal(dr["precio"], new CultureInfo("es-AR")),
+                                    stock = Convert.ToInt32(dr["stock"]),
+                                    rutaImagen = dr["rutaImagen"].ToString(),
+                                    nombreImagen = dr["nombreImagen"].ToString(),
+                                    activo = Convert.ToBoolean(dr["activo"]),
+
+
+                                }
+                            );
+                        }
+                    }
+                }
+            }
+            catch (AccessViolationException ave)
+            {
+                //string error = ex.Message;
+                Console.WriteLine("Error" + ave.Message);
+                lista = new List<Producto>();
+            }
+
+            return lista;
+        }
+
     }
 }

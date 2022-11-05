@@ -18,6 +18,11 @@ namespace CapaNegocio
             return objCapaDato.ListarProductos();  
         }
 
+        public List<Producto> BuscarProducto(string valor)
+        {
+            return objCapaDato.BuscarProductos(valor);
+        }
+
         public int RegistrarProducto(Producto obj, out string Mensaje)
         {
 

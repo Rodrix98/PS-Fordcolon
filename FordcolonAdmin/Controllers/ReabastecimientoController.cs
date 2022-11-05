@@ -37,7 +37,20 @@ namespace FordcolonAdmin.Controllers
 
         }
 
+        [HttpGet]
+        public JsonResult ListarProductosPEDIDOS(string search)
+        {
+            List<Producto> lista = new List<Producto>();
 
+            lista = new CN_Producto().ListarProductos().Where(p => p.nombre.Contains(search)).Select(p => new Producto()
+            {
+                idProducto = p.idProducto,
+                nombre = p.nombre
+
+            }).ToList();
+
+            return new JsonResult { Data = lista, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
 
     }
 }

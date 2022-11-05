@@ -3,6 +3,25 @@
     ViewBag.Title = "Pedidos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<style>
+    .ui-front {
+        z-index: 9999999 !important;
+    }
+
+    .ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    } 
+</style>
 
 <h1 class="mt-4 mb-4">Pedidos</h1>
 
@@ -43,8 +62,8 @@
                     <div class="col-sm-3">
                         <div class="mb-3">
                             <label class="form-label">Producto</label>
-                            <select id="cboProducto" class="form-select">
-                            </select>
+                            @*<select id="cboProducto" class="form-select"></select>*@
+                            <input class="form-control" type="text" name="Producto" id="txtProducto"/>
                         </div>
                     </div>
                     <div class="col-sm-3">
@@ -73,7 +92,7 @@
     
     <script>
 
-        
+
 
         var tabladata;
 
@@ -100,87 +119,95 @@
             });
 
         })
-            //METODO AJAX PARA CARGAR COMBOBOX DE PRODUCTOS EN EL MODAL
+
+
+        $("#txtProducto").autocomplete({
+
+            source: function (request, response) {
+
+                $.ajax({
+                    url: '@Url.Action("ListarProductosPEDIDOS", "Reabastecimiento")',
+                    dataType: "json",
+                    data: { search: $("#txtProducto").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.nombre, value: item.nombre };
+                        }))
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Error")
+                    }
+                });
+            },
+            minLength: 0,
+            response: function (event, ui) {
+                if (! ui.content.length) {
+                    var noResult = { value: "", label: "No se Encuentran Resultados" };
+                    ui.content.push(noResult);
+                }
+            }
+
+        });
+
+
+        function abrirModal(json) {
+
+            $("#txtId").val(0);
+            $("#txtProducto").val("");
+            $("#txtCantidad").val("");
+            $("#MensajeError").hide();
+
+            $("#FormModal").modal("show")
+
+        }
+
+        function Guardar() {
+
+            //LLENA UN OBJETO CON LOS VALORES DE LOS INPUTS
+
+            var today = new Date();
+
+            var fecha = today.toLocaleDateString('es-AR');
+
+            var Pedido = {
+
+                idPedido: $("#txtId").val(),
+                idProducto: {
+                    nombre: $("#txtProducto").val(),
+                },
+                cantidad: $("#txtCantidad").val(),
+                fechaPedido: fecha
+
+            }
+
             jQuery.ajax({
-                url: '@Url.Action("ListarProductos","Mantenedor")',
-                type: "GET",
-                data: null,
+                url: '@Url.Action("GuardarPedido", "Reabastecimiento")',
+                type: "POST",
+                data: JSON.stringify({ obj: Pedido }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
 
-                    $("<option>").attr({ "value": "0", "disabled" : "true" }).text("Seleccione un Producto").appendTo("#cboProducto");
-
-                    $.each(data.data, function (index, valor) {
-                        $("<option>").attr({ "value": valor.idProducto }).text(valor.nombre).appendTo("#cboProducto");
-                    })
-
+                    $(".modal-body").LoadingOverlay("hide");
+                    Pedido.nombre = Pedido.idProducto.nombre;
+                    tabladata.row.add(Pedido).draw(false);
+                    $("#FormModal").modal("hide")
                 },
                 error: function (error) {
-                    console.log(error)
-                }
+                    $(".modal-body").LoadingOverlay("hide");
+                    $("#MensajeError").text("Error Ajax");
+                    $("#MensajeError").show();
+                },
+                beforeSend: function () {
+                    $(".modal-body").LoadingOverlay("show", {
+                        imageResizeFactor: 2,
+                        text: "Cargando...",
+                        size: 14
+                    })
+                },
             });
 
-            function abrirModal(json) {
-
-                $("#txtId").val(0);
-                $("#cboProducto").val($("#cboProducto option:first").val());
-                $("#txtCantidad").val("");
-
-                $("#MensajeError").hide();
-
-                $("#FormModal").modal("show")
-
-            }
-
-            function Guardar() {
-
-                //LLENA UN OBJETO CON LOS VALORES DE LOS INPUTS
-
-                var today = new Date();
-
-                var fecha = today.toLocaleDateString('es-AR');
-
-                var Pedido = {
-
-                    idPedido: $("#txtId").val(),
-                    idProducto: {
-                        idProducto: $("#cboProducto option:selected").val(),
-                        nombre: $("#cboProducto option:selected").text()
-                    },
-                    cantidad: $("#txtCantidad").val(),
-                    fechaPedido: fecha
-
-                }
-
-                jQuery.ajax({
-                    url: '@Url.Action("GuardarPedido", "Reabastecimiento")',
-                    type: "POST",
-                    data: JSON.stringify({ obj: Pedido }),
-                    dataType: "json",
-                    contentType: "application/json; charset=utf-8",
-                    success: function (data) {
-
-                        $(".modal-body").LoadingOverlay("hide");
-                        Pedido.nombre = Pedido.idProducto.nombre;
-                        tabladata.row.add(Pedido).draw(false);
-                        $("#FormModal").modal("hide")
-                    },
-                    error: function (error) {
-                        $(".modal-body").LoadingOverlay("hide");
-                        $("#MensajeError").text("Error Ajax");
-                        $("#MensajeError").show();
-                    },
-                    beforeSend: function () {
-                        $(".modal-body").LoadingOverlay("show", {
-                            imageResizeFactor: 2,
-                            text: "Cargando...",
-                            size: 14
-                        })
-                    },
-                });
-
-            }
+        }
 
 
     </script>
