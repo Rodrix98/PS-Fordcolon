@@ -21,6 +21,7 @@
             <thead>
                 <tr>
                     <th>Descripcion</th>
+                    <th>Marca</th>
                     <th>Activo</th>
                     <th></th>
                 </tr>
@@ -43,6 +44,11 @@
                     <div class="col-sm-6">
                         <label for="txtDescripcion" class="form-label">Descripcion</label>
                         <input type="text" class="form-control" id="txtDescripcion" autocomplete="off">
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label">Marca</label>
+                        <select id="cboMarca" class="form-select">
+                        </select>
                     </div>
                     <div class="col-sm-6">
                         <label for="cboActivo" class="form-label">Activo</label>
@@ -87,6 +93,7 @@
             },
             "columns": [
                 { "data": "descripcion" },
+                { "data": "relacionMarca"},
                 {
                     "data": "activo", "render": function (valor) {
                         if (valor) {
@@ -106,6 +113,25 @@
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
+            }
+        });
+
+        jQuery.ajax({
+            url: '@Url.Action("ListarMarcas", "Mantenedor")',
+            type: "GET",
+            data: null,
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+
+                $("<option>").attr({ "value": "0", "disabled" : "true" }).text("Seleccione Una Marca").appendTo("#cboMarca");
+
+                $.each(data.data, function (index, valor) {
+                    $("<option>").attr({ "value": valor.idMarca }).text(valor.descripcion).appendTo("#cboMarca");
+                })
+            },
+            error: function (error) {
+                console.log(error)
             }
         });
 
@@ -188,7 +214,8 @@
 
                 idCategoria: $("#txtId").val(),
                 descripcion: $("#txtDescripcion").val(),
-                activo: $("#cboActivo").val() == 1 ? true : false
+                activo: $("#cboActivo").val() == 1 ? true : false,
+                relacionMarca: $("#cboMarca option:selected").text()
             }
 
             jQuery.ajax({

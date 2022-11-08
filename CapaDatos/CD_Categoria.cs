@@ -67,7 +67,7 @@ namespace CapaDatos
             {
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
                 {
-                    string query = "SELECT idCategoria, descripcion, activo FROM Categoria";
+                    string query = "SELECT idCategoria, descripcion, activo, relacionMarca FROM Categoria";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -84,7 +84,8 @@ namespace CapaDatos
                                 {
                                     idCategoria = Convert.ToInt32(dr["idCategoria"]),
                                     descripcion = dr["descripcion"].ToString(),
-                                    activo = Convert.ToBoolean(dr["activo"])
+                                    activo = Convert.ToBoolean(dr["activo"]),
+                                    relacionMarca = dr["relacionMarca"].ToString(),
                                 }
                             );
                         }
@@ -114,6 +115,7 @@ namespace CapaDatos
                     SqlCommand cmd = new SqlCommand("sp_RegistrarCategoria", oconexion);
                     cmd.Parameters.AddWithValue("descripcion", obj.descripcion);
                     cmd.Parameters.AddWithValue("activo", obj.activo);
+                    cmd.Parameters.AddWithValue("relacionMarca", obj.relacionMarca);
                     cmd.Parameters.Add("resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;

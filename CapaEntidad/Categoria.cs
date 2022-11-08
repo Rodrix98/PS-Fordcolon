@@ -11,5 +11,6 @@ namespace CapaEntidad
         public int idCategoria { get; set; }
         public string descripcion { get; set; }
         public bool activo { get; set; }
+        public string relacionMarca { get; set; }
     }
 }
