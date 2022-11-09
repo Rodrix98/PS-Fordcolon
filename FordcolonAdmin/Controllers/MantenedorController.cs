@@ -228,6 +228,16 @@ namespace FordcolonAdmin.Controllers
 
             return Json(new { resultado = respuesta, mensaje = mensaje }, JsonRequestBehavior.AllowGet);
         }
+        
+        [HttpGet]
+        public JsonResult MarcaParaProducto(int idCategoria)
+        {
+            List<Marca> marca = new List<Marca>();
+
+            marca = new CN_Producto().MarcaParaProducto(idCategoria);
+
+            return Json(new { data = marca }, JsonRequestBehavior.AllowGet);
+        }
 
         #endregion
     }

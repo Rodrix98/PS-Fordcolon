@@ -36,10 +36,10 @@ namespace CapaNegocio
             {
                 Mensaje = "La descripcion del producto no puede estar vacio";
             }
-            else if (obj.idMarca.idMarca == 0)
-            {
-                Mensaje = "Debe seleccionar una marca";
-            }
+            //else if (obj.idMarca.idMarca == 0)
+            //{
+            //    Mensaje = "Debe seleccionar una marca";
+            //}
             else if (obj.idCategoria.idCategoria == 0)
             {
                 Mensaje = "Debe seleccionar una categoria";
@@ -112,6 +112,11 @@ namespace CapaNegocio
         public bool EliminarProducto(int id, out string Mensaje)
         {
             return objCapaDato.EliminarProducto(id, out Mensaje);
+        }
+
+        public List<Marca> MarcaParaProducto(int idCategoria)
+        {
+            return objCapaDato.MarcaParaProducto(idCategoria);
         }
 
     }

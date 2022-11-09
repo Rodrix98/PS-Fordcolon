@@ -3,6 +3,9 @@
     ViewBag.Title = "Producto";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <link href="~/Estilos/EstiloProducto.css" rel="stylesheet" />
+</head>
 
 <h1 class="mt-4 mb-4">Productos</h1>
 <div class="card mt-4">
@@ -63,14 +66,14 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="mb-3">
+                        @*<div class="mb-3">
                             <label class="form-label">Marca</label>
                             <select id="cboMarca" class="form-select">
                             </select>
-                        </div>
+                        </div>*@
                         <div class="mb-3">
                             <label class="form-label">Vehiculo</label>
-                            <select id="cboCategoria" class="form-select">
+                            <select id="cboCategoria" class="form-select" onfocus="this.size=7" onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -172,11 +175,22 @@
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.12.1/i18n/es-ES.json"
-            }
+            },
+            columnDefs: [
+                {
+                    targets: 4,
+                    render: $.fn.dataTable.render.number('.', ',', 2, ''),
+                    className: 'dt-body-right'
+                },
+                {
+                    targets: 5,
+                    className: 'dt-body-right'
+                }
+            ]
         });
 
         //METODO AJAX PARA CARGAR COMBOBOX DE MARCAS
-        jQuery.ajax({
+        @*jQuery.ajax({
             url: '@Url.Action("ListarMarcas", "Mantenedor")',
             type: "GET",
             data: null,
@@ -193,7 +207,7 @@
             error: function (error) {
                 console.log(error)
             }
-        });
+        });*@
 
         //METODO AJAX PARA CARGAR COMBOBOX DE CATEGORIAS
         jQuery.ajax({
@@ -204,7 +218,7 @@
             contentType: "application/json; charset=utf-8",
             success: function (data) {
 
-                $("<option>").attr({ "value": "0", "disabled" : "true" }).text("Seleccione Categoria").appendTo("#cboCategoria");
+                $("<option>").attr({ "value": "0", "disabled" : "true" }).text("Seleccione Un Vehiculo").appendTo("#cboCategoria");
 
                 $.each(data.data, function (index, valor) {
                     $("<option>").attr({ "value": valor.idCategoria }).text(valor.descripcion).appendTo("#cboCategoria");
@@ -262,7 +276,7 @@
             $("#fileProducto").val("");
             $("#txtNombre").val("");
             $("#txtDescripcion").val("");
-            $("#cboMarca").val($("#cboMarca option:first").val());
+            /*$("#cboMarca").val($("#cboMarca option:first").val());*/
             $("#cboCategoria").val($("#cboCategoria option:first").val());
             $("#txtPrecio").val("");
             $("#txtStock").val("");
@@ -276,7 +290,7 @@
                 $("#txtId").val(json.idProducto);
                 $("#txtNombre").val(json.nombre);
                 $("#txtDescripcion").val(json.descripcion);
-                $("#cboMarca").val(json.idMarca.idMarca);
+                /*$("#cboMarca").val(json.idMarca.idMarca);*/
                 $("#cboCategoria").val(json.idCategoria.idCategoria);
                 $("#txtPrecio").val(json.precio);
                 $("#txtStock").val(json.stock);
@@ -301,7 +315,7 @@
                         $("#mensajeError").text("Error al mostrar imagen");
                     },
                     beforeSend: function () {
-                        
+
                     }
                 });
             }
@@ -338,7 +352,7 @@
                 confirmButtonText: "Si",
                 cancelButtonText: "No",
                 closeOnCancel: true,
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function () {
 
@@ -381,8 +395,8 @@
                 nombre: $("#txtNombre").val(),
                 descripcion: $("#txtDescripcion").val(),
                 idMarca: {
-                    idMarca: $("#cboMarca option:selected").val(),
-                    descripcion: $("#cboMarca option:selected").text()
+                    idMarca: 0,
+                    descripcion: 0
                 },
                 idCategoria: {
                     idCategoria: $("#cboCategoria option:selected").val(),
@@ -393,6 +407,28 @@
                 stock: $("#txtStock").val(),
                 activo: $("#cboActivo").val() == 1 ? true : false
             }
+
+            var idCategoria = Producto.idCategoria.idCategoria
+
+            var idMarca;
+            var descripcionMarca;
+
+            jQuery.ajax({
+                url: '@Url.Action("MarcaParaProducto", "Mantenedor")',
+                data: { idCategoria: idCategoria },
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    $.each(data.data, function (index, valor) {
+                        idMarca = valor.idMarca
+                        descripcionMarca = valor.descripcion
+                    })
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
 
             var request = new FormData();
 
@@ -415,6 +451,9 @@
                         if (data.idGenerado != 0) {
 
                             Producto.idProducto = data.idGenerado;
+                            Producto.idMarca.idMarca = idMarca;
+                            Producto.idMarca.descripcion = descripcionMarca;
+
                             tabladata.row.add(Producto).draw(false);
 
                             $("#FormModal").modal("hide")

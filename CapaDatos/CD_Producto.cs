@@ -83,7 +83,7 @@ namespace CapaDatos
                     SqlCommand cmd = new SqlCommand("sp_RegistarProducto", oconexion);
                     cmd.Parameters.AddWithValue("nombre", obj.nombre);
                     cmd.Parameters.AddWithValue("descripcion", obj.descripcion);
-                    cmd.Parameters.AddWithValue("idMarca", obj.idMarca.idMarca);
+                    //cmd.Parameters.AddWithValue("idMarca", obj.idMarca.idMarca);
                     cmd.Parameters.AddWithValue("idCategoria", obj.idCategoria.idCategoria);
                     cmd.Parameters.AddWithValue("precio", obj.precio);
                     cmd.Parameters.AddWithValue("stock", obj.stock);
@@ -283,6 +283,51 @@ namespace CapaDatos
 
             return lista;
         }
+
+        public List<Marca> MarcaParaProducto(int idCategoria)
+        {
+            List<Marca> marca = new List<Marca>();
+
+            try
+            {
+                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                {
+
+                    SqlCommand cmd = new SqlCommand("sp_MarcaParaProducto", oconexion);
+                    cmd.Parameters.AddWithValue("idCategoria", idCategoria);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+
+                        while (dr.Read())
+                        {
+
+                            marca.Add(
+
+                                new Marca()
+                                {
+                                    idMarca = Convert.ToInt32(dr["idMarca"]),
+                                    descripcion = dr["descripcion"].ToString()
+                                } 
+                            );
+                            
+                        }
+                    }
+                }
+            }
+            catch (AccessViolationException ave)
+            {
+                //string error = ex.Message;
+                Console.WriteLine("Error" + ave.Message);
+                marca = new List<Marca>();
+            }
+
+            return marca;
+        }
+
 
     }
 }
