@@ -2,9 +2,13 @@
     ViewBag.Title = "Home Page";
 }
 <head>
-
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" />
 </head>
+<style>
+    .pdfButton{
+        color: red;
+    }
+</style>
 
 <h1 class="mt-4 mb-4">Resumen de Ventas</h1>
 <div class="row">
@@ -85,16 +89,11 @@
                         <button class="btn btn-primary" id="btnBuscar" type="button"><i class="fa fa-search"></i> Buscar</button>
                     </div>
                 </div>
-                <div class="col-sm-2">
+                @*<div class="col-sm-2">
                     <div class="mb-2 d-grid">
                         <button class="btn btn-success" type="submit"><i class="fa fa-file-excel"></i> Exportar</button>
                     </div>
-                </div>
-                <div class="col-sm-2">
-                    <div id="botonPDF" class="mb-2 d-grid">
-                        @*<button class="btn btn-success" type="submit"><i class="fa fa-file-pdf"></i> Exportar</button>*@
-                    </div>
-                </div>
+                </div>*@
             </div>
         </form>
         <hr />
@@ -200,6 +199,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 
 
     <script>
@@ -288,15 +288,20 @@
                     buttons: [
                         {
                             extend: 'pdf',
-                            text: '<span class="fas fa-file-pdf"></span>',
+                            text: 'Exportar a PDF',
                             titleAttr: 'Exportar a PDF',
-                            className: 'btn btn-danger',
-                            
+                            className: 'btnPDF',
+
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'Exportar a Excel',
+                            titleAttr: 'Exportar a Excel',
+                            className: 'btnExcel',
+
                         }
                     ]
                 });
-
-                tabladata.buttons().container().appendTo($('#botonPDF'))
 
             })
 

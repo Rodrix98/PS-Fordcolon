@@ -19,7 +19,7 @@ namespace CapaDatos
             {
                 using(SqlConnection oconexion = new SqlConnection(Conexion.cn))
                 {
-                    string query = "SELECT idUsuario, nombre, apellido, correo, clave, reestablecer, activo FROM Usuario";
+                    string query = "SELECT idUsuario, nombre, apellido, correo, clave, reestablecer, activo, aceptoCopy FROM Usuario";
 
                     SqlCommand cmd = new SqlCommand(query, oconexion);
                     cmd.CommandType = CommandType.Text;
@@ -39,7 +39,8 @@ namespace CapaDatos
                                     correo = dr["correo"].ToString(),
                                     clave = dr["clave"].ToString(),
                                     reestablecer = Convert.ToBoolean(dr["reestablecer"]),
-                                    activo = Convert.ToBoolean(dr["activo"])
+                                    activo = Convert.ToBoolean(dr["activo"]),
+                                    aceptoCopy = Convert.ToBoolean(dr["aceptoCopy"])
                                 }
                             );
                         }
@@ -209,6 +210,32 @@ namespace CapaDatos
                 Console.WriteLine("Error" + ave.Message);
             }
             return resultado;
+        }
+
+        public void ConfirmarCopyright(string correo)
+        {
+
+            try
+            {
+                using (SqlConnection oconexion = new SqlConnection(Conexion.cn))
+                {
+                    string query = "sp_AceptarCopy";
+
+                    SqlCommand cmd = new SqlCommand(query, oconexion);
+                    cmd.Parameters.AddWithValue("correo", correo);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    oconexion.Open();
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (AccessViolationException ave)
+            {
+                //string error = ex.Message;
+                Console.WriteLine("Error" + ave.Message);
+            }
+
         }
     }
 

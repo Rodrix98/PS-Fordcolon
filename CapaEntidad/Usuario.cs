@@ -15,6 +15,7 @@ namespace CapaEntidad
         public string clave { get; set; }
         public bool reestablecer { get; set; }
         public bool activo { get; set; }
+        public bool aceptoCopy { get; set; }
 
     }
 }

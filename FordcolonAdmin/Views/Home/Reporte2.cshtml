@@ -4,13 +4,19 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="mt-4 mb-4">Productos mas Vendidos del Mes</h1>
+<h1 class="mt-4 mb-4">Top 5 Productos mas Vendidos del Mes</h1>
 <div class="card mb-5">
     <div class="card-header">
         Productos mas Vendidos del Mes
     </div>
     <div class="card-body">
         <div class="row align-items-sm-start">
+            <div class="col-sm-2">
+                <div class="mb-2">
+                    <label class="form-label">Seleccione año:</label>
+                    <input class="form-control" type="number" name="Año" id="txtAño"/>
+                </div>
+            </div>
             <div class="col-sm-2">
                 <div class="mb-2">
                     <label class="form-label">Seleccione Mes:</label>
@@ -49,11 +55,16 @@
         var controlBar2;
         var graficoBar2;
 
+        var año = new Date().getFullYear()
+
         var fecha = new Date().getMonth() + 1
 
-        var URLProductos = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + fecha
+        var URLProductos = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + fecha + "&anio=" + año
 
         $("#cboMes").val(fecha)
+        $("#txtAño").val(año)
+        $("#txtAño").attr('max', año)
+        $("#txtAño").attr('min', 1960)
 
         jQuery.ajax({
             url: URLProductos,
@@ -127,7 +138,7 @@
                         },
                         title: {
                             display: true,
-                            text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
+                            text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1] + " " +$("#txtAño").val(),
                             position: 'top',
                             fontSize: 25,
                         }
@@ -141,7 +152,7 @@
 
         $("#btnBuscarReporte").on("click", function () {
 
-            var URLProductos2 = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + $('#cboMes').val()
+            var URLProductos2 = '@Url.Action("ReporteProductosMasVendidos", "Home")' + "?mes=" + $('#cboMes').val() + "&anio=" + $('#txtAño').val()
 
             jQuery.ajax({
                 url: URLProductos2,
@@ -217,7 +228,7 @@
                             },
                             title: {
                                 display: true,
-                                text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1],
+                                text: arrayMeses[1] == null ? 'No se han encontrado resultados' : 'Cantidad de Productos de ' + arrayMeses[1] + " " + $("#txtAño").val(),
                                 position: 'top',
                                 fontSize: 25,
                             }

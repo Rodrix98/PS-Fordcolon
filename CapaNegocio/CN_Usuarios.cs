@@ -138,5 +138,12 @@ namespace CapaNegocio
                 return false;
             }
         }
+
+        public void ConfirmarCopyright(string correo)
+        {
+            
+            objCapaDato.ConfirmarCopyright(correo);
+            
+        }
     }
 }

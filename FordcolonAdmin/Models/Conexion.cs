@@ -87,7 +87,7 @@ namespace FordcolonAdmin.Models
             }
         }
 
-        public List<ReporteProducto> ReporteCantidadProductos(int mes)
+        public List<ReporteProducto> ReporteCantidadProductos(int mes, int anio)
         {
             List<ReporteProducto> lista = new List<ReporteProducto>();
 
@@ -97,6 +97,7 @@ namespace FordcolonAdmin.Models
 
                 SqlCommand cmd = new SqlCommand(query, oconexion);
                 cmd.Parameters.AddWithValue("Mes", mes);
+                cmd.Parameters.AddWithValue("Anio", anio);
                 
                 cmd.CommandType = CommandType.StoredProcedure;
 

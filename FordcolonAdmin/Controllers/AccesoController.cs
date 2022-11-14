@@ -27,6 +27,38 @@ namespace FordcolonAdmin.Controllers
             return View();
         }
 
+        public ActionResult Copyright(string correo)
+        {
+            Usuario oUsuario = new Usuario();
+
+            //correo = (ViewData["usuarioCorreo"]).ToString();
+            if (TempData.ContainsKey("usuarioCorreo"))
+                correo = TempData["usuarioCorreo"].ToString();
+
+            TempData.Keep("usuarioCorreo");
+            //TempData["usuarioCorreo"] = correo;
+
+            return View();
+        }
+
+        public ActionResult RedirectCopy(string correo) //xddddd
+        {
+            Usuario oUsuario = new Usuario();
+
+            //correo = (ViewData["usuarioCorreo"]).ToString();
+
+            if (TempData.ContainsKey("usuarioCorreo"))
+            correo = TempData["usuarioCorreo"].ToString();
+
+            CN_Usuarios obj = new CN_Usuarios();
+
+            obj.ConfirmarCopyright(correo);
+            
+            FormsAuthentication.SetAuthCookie(oUsuario.correo, false);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         public ActionResult Index(string correo, string clave)
         {
@@ -56,6 +88,16 @@ namespace FordcolonAdmin.Controllers
 
                     ViewBag.Error = "Esta cuenta esta desactivada";
                     return View();
+
+                }
+                else if (oUsuario.aceptoCopy == false)
+                {
+
+                    TempData["usuarioCorreo"] = oUsuario.correo;
+
+                    ViewBag.Error = null;
+
+                    return RedirectToAction("Copyright");
 
                 }
                 

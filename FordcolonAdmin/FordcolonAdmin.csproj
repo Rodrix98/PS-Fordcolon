@@ -343,6 +343,7 @@
     <Content Include="Content\v4-shims.css" />
     <Content Include="Content\v4-shims.min.css" />
     <Content Include="Estilos\Estilo.css" />
+    <Content Include="Estilos\EstiloCopyright.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -527,6 +528,7 @@
     <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\Home\Reporte1.cshtml" />
     <Content Include="Views\Home\Reporte2.cshtml" />
+    <Content Include="Views\Acceso\Copyright.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

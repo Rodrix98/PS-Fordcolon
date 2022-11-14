@@ -151,11 +151,11 @@ namespace FordcolonAdmin.Controllers
         }
 
         [HttpGet]
-        public JsonResult ReporteProductosMasVendidos(int mes)
+        public JsonResult ReporteProductosMasVendidos(int mes, int anio)
         {
             Conexion c = new Conexion();
 
-            List<ReporteProducto> lista = c.ReporteCantidadProductos(mes);
+            List<ReporteProducto> lista = c.ReporteCantidadProductos(mes, anio);
 
             return Json(lista, JsonRequestBehavior.AllowGet);
         }
