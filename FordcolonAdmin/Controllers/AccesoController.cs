@@ -31,21 +31,17 @@ namespace FordcolonAdmin.Controllers
         {
             Usuario oUsuario = new Usuario();
 
-            //correo = (ViewData["usuarioCorreo"]).ToString();
             if (TempData.ContainsKey("usuarioCorreo"))
                 correo = TempData["usuarioCorreo"].ToString();
 
             TempData.Keep("usuarioCorreo");
-            //TempData["usuarioCorreo"] = correo;
 
             return View();
         }
 
-        public ActionResult RedirectCopy(string correo) //xddddd
+        public ActionResult RedirectCopy(string correo)
         {
             Usuario oUsuario = new Usuario();
-
-            //correo = (ViewData["usuarioCorreo"]).ToString();
 
             if (TempData.ContainsKey("usuarioCorreo"))
             correo = TempData["usuarioCorreo"].ToString();

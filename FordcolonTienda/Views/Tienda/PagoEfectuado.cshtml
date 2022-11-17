@@ -7,6 +7,13 @@
 <head>
     <link href="~/Estilos/FondoIinicio.css" rel="stylesheet" />
 </head>
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <img src="~/IMG/LOGO.PNG" alt="Alternate Text" />
+        </div>
+    </div>
+</header>
 <div class="row">
     <div class="col-sm-12 text-center">
         <br /><br />
@@ -14,14 +21,28 @@
         @{
             if ((bool)ViewData["Status"])
             {
-
-                <h1 class="text-success">Gracias!</h1>
-                <i class="far fa-check-circle fa-9x text-success"></i>
-                <h2 class="text-success"> Su pago fue realizado con Exito!</h2>
-                <h4 class="mb-3">ID de Transaccion: @ViewData["idTransaccion"]</h4>
-                <a href="@Url.Action("Index", "Tienda")" class="btn btn-primary mb-5">Volver a la Tienda</a>
-                <h4 class="mb-3">DESCARGAR COMPROBANTE DE COMPRA</h4>
-                <a href="@Url.Action("ImprimirComprobante", "Tienda")" class="btn btn-success"><i class="fa fa-file-pdf"></i> Descargar Comprobante</a>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-5">
+                            <div class="card shadow-lg border-3 border-dark rounded-lg mt-5 mb-5">
+                                <h1 class="text-success">Gracias!</h1>
+                                <div class="d-flex justify-content-center">
+                                    <i class="far fa-check-circle fa-9x text-success"></i>
+                                </div>
+                                <h2 class="text-success"> Su pago fue realizado con Exito!</h2>
+                                <h4 class="mb-3">ID de Transaccion: @ViewData["idTransaccion"]</h4>
+                                <div class="d-flex justify-content-center">
+                                    <a href="@Url.Action("Index", "Tienda")" class="btn btn-primary mb-5">Volver a la Tienda</a>
+                                </div>
+                                <h4 class="mb-3">DESCARGAR COMPROBANTE DE COMPRA</h4>
+                                <div class="d-flex justify-content-center mb-4">
+                                    <a href="@Url.Action("ImprimirComprobante", "Tienda")" class="btn btn-success"><i class="fa fa-file-pdf"></i> Descargar Comprobante</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 TempData["IdTransaccion"] = ViewData["IdTransaccion"];
                 TempData["Localidad"] = ViewData["Localidad"];
                 TempData["CodigoPostal"] = ViewData["CodigoPostal"];

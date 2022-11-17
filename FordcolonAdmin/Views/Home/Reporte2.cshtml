@@ -65,6 +65,9 @@
         $("#txtAño").val(año)
         $("#txtAño").attr('max', año)
         $("#txtAño").attr('min', 1960)
+        $("[type='number']").keypress(function (evt) {
+            evt.preventDefault();
+        });
 
         jQuery.ajax({
             url: URLProductos,

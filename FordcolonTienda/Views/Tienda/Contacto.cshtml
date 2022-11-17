@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Contacto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link href="~/Estilos/FondoIinicio.css" rel="stylesheet" />
+</head>
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <img src="~/IMG/LOGO.PNG" alt="Alternate Text" />
+        </div>
+    </div>
+</header>
+<div class="bg-dark bg-gradient text-white text-center">
+    <h1 class="mt-2 mb-2">PREGUNTAS FRECUENTES</h1>
+</div>
+<div class="container mt-5">
+    <div class="card mb-2">
+        <div class="card-header">
+            <h4>Por donde puedo contactarme?</h4>
+        </div>
+        <div class="card-body">
+            <label class="mb-3">
+                Si necesitas contactarnos para cualquier tipo de problemas o consultas, podes mandarnos un correo a travez del siguiente correo:
+            </label>
+            <h4 class="text-center">pruebamail@prueba.com</h4>
+        </div>
+    </div>
+    <div class="card mb-2">
+        <div class="card-header">
+            <h4>Como creo mi cuenta?</h4>
+        </div>
+        <div class="card-body">
+            <label>
+                Para la creacion de una cuenta, debe dirigirse a la parte superior derecha de la pantalla
+                y clickear en el simbolo de usuario o a travez de este <a href="@Url.Action("RegistrarCliente", "Acceso")">Link</a>.
+                Una vez dentro de la pagina de creacion de cuenta debera rellenar los espacios con los datos necesarios y darle al
+                boton de Crear Cuenta.
+            </label>
+        </div>
+    </div>
+    <div class="card mb-2">
+        <div class="card-header">
+            <h4>Como realizo una compra?</h4>
+        </div>
+        <div class="card-body">
+            <label>
+                Primero se debe seleccionar al menos un producto del catalogo y agregarlo al carrito.
+                Una vez dentro del carrito podra modificar las cantidades requeridas de los productos elegidos
+                o tambien podra eliminar cualquier producto en caso de no requerirlo. Luego debera completar
+                en la seccion derecha los detalles del envio para el pedido y una vez completados debera hacer click
+                sobre el boton de "Terminar y procesar Pago". Finalmente se le llevara a una seccion en donde podra
+                descargar un comprobante de la compra realizada.
+            </label>
+        </div>
+    </div>
+    <div class="card mb-2">
+        <div class="card-header">
+            <h4>Como puedo ver las compras que he realizado?</h4>
+        </div>
+        <div class="card-body">
+            <label>
+                Se debe dirigir a la parte superior derecha de la pantalla y hacerse click sobre el icono de usuario en donde se le mostrara
+                una opcion de "Mis Compras". <a href="@Url.Action("MisCompras", "Tienda")">Link</a>
+            </label>
+        </div>
+    </div>
+    <div class="card mb-5">
+        <div class="card-header">
+            <h4>Cuales son los requisitos para poder realizar una compra?</h4>
+        </div>
+        <div class="card-body">
+            <label>
+                El unico requisito para poder comprar en nuestra pagina es tener una cuenta registrada.
+            </label>
+        </div>
+    </div>
+</div>
+

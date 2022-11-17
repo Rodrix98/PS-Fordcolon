@@ -93,7 +93,8 @@ namespace CapaDatos
                                     cantidad = Convert.ToInt32(dr["cantidad"]),
                                     total = Convert.ToDecimal(dr["total"], new CultureInfo("es-AR")),
                                     idTransaccion = dr["idTransaccion"].ToString(),
-                                    fechaVenta = dr["fechaVenta"].ToString()
+                                    fechaVenta = dr["fechaVenta"].ToString(),
+                                    idVenta = Convert.ToInt32(dr["idVenta"])
                                 }
                             );
                         }

@@ -426,11 +426,17 @@ namespace FordcolonTienda.Controllers
                 cantidad = oc.cantidad,
                 total = oc.total,
                 idTransaccion = oc.idTransaccion,
-                fechaVenta = oc.fechaVenta
+                fechaVenta = oc.fechaVenta,
+                idVenta = oc.idVenta,
 
-            }).ToList();
+            }).OrderByDescending(oc => oc.idVenta).ToList();
 
             return View(oLista);
+        }
+
+        public ActionResult Contacto()
+        {
+            return View();
         }
 
     }

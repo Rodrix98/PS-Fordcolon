@@ -1,9 +1,9 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-<head>
+@*<head>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css" />
-</head>
+</head>*@
 <style>
     .pdfButton{
         color: red;
@@ -288,16 +288,16 @@
                     buttons: [
                         {
                             extend: 'pdf',
-                            text: 'Exportar a PDF',
+                            text: '<i class="fas fa-file-pdf"></i> Exportar a PDF',
                             titleAttr: 'Exportar a PDF',
-                            className: 'btnPDF',
+                            className: 'btn btn-danger',
 
                         },
                         {
                             extend: 'excel',
-                            text: 'Exportar a Excel',
+                            text: '<i class="fas fa-file-excel"></i> Exportar a Excel',
                             titleAttr: 'Exportar a Excel',
-                            className: 'btnExcel',
+                            className: 'btn btn-success',
 
                         }
                     ]
