@@ -124,7 +124,7 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("idProducto", obj.idProducto);
                     cmd.Parameters.AddWithValue("nombre", obj.nombre);
                     cmd.Parameters.AddWithValue("descripcion", obj.descripcion);
-                    cmd.Parameters.AddWithValue("idMarca", obj.idMarca.idMarca);
+                    //cmd.Parameters.AddWithValue("idMarca", obj.idMarca.idMarca);
                     cmd.Parameters.AddWithValue("idCategoria", obj.idCategoria.idCategoria);
                     cmd.Parameters.AddWithValue("precio", obj.precio);
                     cmd.Parameters.AddWithValue("stock", obj.stock);
