@@ -165,6 +165,7 @@
     <Content Include="Content\sweetalert.css" />
     <Content Include="Content\v4-shims.css" />
     <Content Include="Content\v4-shims.min.css" />
+    <Content Include="Estilos\EstiloCopyright.css" />
     <Content Include="Estilos\FondoIinicio.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -268,6 +269,7 @@
     <Content Include="Views\Tienda\ImprimirComprobante.cshtml" />
     <Content Include="Views\Tienda\MisCompras.cshtml" />
     <Content Include="Views\Tienda\Contacto.cshtml" />
+    <Content Include="Views\Acceso\Copyright.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

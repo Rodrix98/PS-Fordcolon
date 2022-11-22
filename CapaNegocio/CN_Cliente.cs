@@ -18,6 +18,13 @@ namespace CapaNegocio
             return objCapaDato.ListarCliente();
         }
 
+        public void ConfirmarCopyright(string correo)
+        {
+
+            objCapaDato.ConfirmarCopyright(correo);
+
+        }
+
         public int RegistrarCliente(Cliente obj, out string Mensaje)
         {
 

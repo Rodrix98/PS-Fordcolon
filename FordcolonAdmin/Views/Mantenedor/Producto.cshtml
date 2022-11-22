@@ -494,6 +494,8 @@
                     else {
 
                         if (data.operacionExitosa) {
+                            Producto.idMarca.idMarca = idMarca;
+                            Producto.idMarca.descripcion = descripcionMarca;
                             tabladata.row(filaSeleccionada).data(Producto).draw(false);
                             filaSeleccionada = null;
 

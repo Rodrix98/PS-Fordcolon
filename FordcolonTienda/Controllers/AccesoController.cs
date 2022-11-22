@@ -64,6 +64,45 @@ namespace FordcolonTienda.Controllers
             }
         }
 
+        public ActionResult Copyright(string correo, string idCliente)
+        {
+            Cliente oCliente = new Cliente();
+
+            if (TempData.ContainsKey("clienteCorreo"))
+                correo = TempData["clienteCorreo"].ToString();
+
+            if (TempData.ContainsKey("idCliente"))
+                idCliente = TempData["idCliente"].ToString();
+
+            TempData.Keep("clienteCorreo");
+            TempData.Keep("idCliente");
+
+            return View();
+        }
+
+        public ActionResult RedirectCopy(string correo, string idCliente)
+        {
+            Cliente oCliente = new Cliente();
+
+            if (TempData.ContainsKey("clienteCorreo"))
+                correo = TempData["clienteCorreo"].ToString();
+
+            if (TempData.ContainsKey("idCliente"))
+                idCliente = TempData["idCliente"].ToString();
+
+            oCliente.idCliente = Convert.ToInt32(idCliente);
+
+            CN_Cliente obj = new CN_Cliente();
+
+            obj.ConfirmarCopyright(correo);
+
+            FormsAuthentication.SetAuthCookie(oCliente.correo, false);
+
+            Session["Cliente"] = oCliente;
+
+            return RedirectToAction("Index", "Tienda");
+        }
+
         [HttpPost]
         public ActionResult Index(string correo, string clave)
         {
@@ -85,6 +124,16 @@ namespace FordcolonTienda.Controllers
 
                     TempData["idCliente"] = oCliente.idCliente;
                     return RedirectToAction("CambiarClave", "Acceso");
+                }
+                else if (oCliente.aceptoCopy == false)
+                {
+
+                    TempData["clienteCorreo"] = oCliente.correo;
+                    TempData["idCliente"] = oCliente.idCliente;
+
+                    ViewBag.Error = null;
+
+                    return RedirectToAction("Copyright");
                 }
                 else
                 {
