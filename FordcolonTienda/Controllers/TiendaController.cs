@@ -12,6 +12,8 @@ using System.Globalization;
 using Rotativa;
 using FordcolonTienda.Models.ViewModel;
 using FordcolonTienda.Filter;
+using System.Net.Mail;
+using System.Net;
 
 namespace FordcolonTienda.Controllers
 {
@@ -89,7 +91,7 @@ namespace FordcolonTienda.Controllers
                 p.idMarca.idMarca == (idMarca == 0 ? p.idMarca.idMarca : idMarca) /*&&
                 p.stock > 0 */ && p.activo == true
 
-            ).ToList();
+            ).OrderBy(p => p.nombre).ToList();
 
             var jsonresult = Json(new { data = lista }, JsonRequestBehavior.AllowGet);
 
@@ -329,6 +331,8 @@ namespace FordcolonTienda.Controllers
 
             ViewData["Status"] = status;
 
+            //Venta oVenta = (Venta)TempData["Venta"];
+
             if (status)
             {
                 Venta oVenta = (Venta)TempData["Venta"];
@@ -349,6 +353,46 @@ namespace FordcolonTienda.Controllers
 
                 ViewData["Provincia"] = Provincia;
             }
+
+            //TempData["idTransaccion"] = oVenta.idTransaccion;
+
+            //TempData["Localidad"] = Localidad;
+
+            //TempData["CodigoPostal"] = CodigoPostal;
+
+            //TempData["Provincia"] = Provincia;
+
+            ////correo
+
+            //var GenerarPDF = new Rotativa.ActionAsPdf("ImprimirComprobante")
+            //{
+            //    FileName = "Comprobante " + oVenta.idTransaccion
+            //};
+
+            //var pdfAsBytes = GenerarPDF.BuildFile(this.ControllerContext);
+
+            //var msgTitle = "Comprobante de compra " + oVenta.idTransaccion + ".pdf";
+
+            //var OrderConfirmation = "Su Compra se ha realizado con exito.<br />" +
+            //                        " Le Dejamos adjunto su comprobante de compra: ";
+
+            //using (MailMessage mail = new MailMessage())
+            //{
+            //    mail.From = new MailAddress("rodriwheels41@gmail.com");
+            //    mail.To.Add("rodriwheels41@gmail.com");
+            //    mail.Subject = msgTitle;
+            //    mail.Body = OrderConfirmation;
+            //    mail.IsBodyHtml = true;
+            //    //STREAM THE CONVERTED BYTES AS ATTACHMENT HERE
+            //    mail.Attachments.Add(new Attachment(new MemoryStream(pdfAsBytes), "Comprobante.pdf"));
+
+            //    using (SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587))
+            //    {
+            //        smtp.Credentials = new NetworkCredential("rodriwheels41@gmail.com", "odwafelocmmwchec");
+            //        smtp.EnableSsl = true;
+            //        smtp.Send(mail);
+            //    }
+            //}
 
             return View();
         }
